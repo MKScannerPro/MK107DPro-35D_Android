@@ -1,0 +1,295 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.moko.mk107dpro">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <application
+        android:name="com.moko.mk107dpro.BaseApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="MK107DPro"
+        android:theme="@style/LaunchActivityTheme">
+
+        <activity
+            android:name="com.moko.mk107dpro.activity.GuideActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.moko.mk107dpro.activity.RemoteMainWithMeteringActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.MqttSettings03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.SetAppMQTT03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.ModifyName03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.AboutActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.DeviceScanner03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.DeviceDetail03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.set.DeviceSetting03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.set.DeviceInfo03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.set.OTA03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.set.IndicatorSetting03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.DataReportTimeout03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.set.CommunicationTimeout03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.set.NetworkReportInterval03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.filter.DuplicateDataFilter03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.ScannerUploadOption03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.filter.FilterMacAddress03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.filter.FilterAdvName03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.filter.FilterRawDataSwitch03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.filter.FilterIBeacon03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.filter.FilterUID03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.filter.FilterUrl03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.filter.FilterTLM03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.filter.FilterOther03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.filter.UploadDataOption03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.set.SyncTimeFromNTP03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.set.SystemTime03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.set.ModifyMQTTSettings03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.DeviceConfig03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.WifiSettings03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.NetworkSettings03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.NtpSettings03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.ScannerFilter03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.DeviceInformation03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.BleManager03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.BXPButtonInfo03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.BleOtherInfo03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.set.ReconnectTimeout03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.filter.FilterBXPButton03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.filter.FilterBXPTag03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.filter.FilterPIR03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.set.ModifyNetworkSettings03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.set.ModifySettings03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.set.ModifyWifiSettings03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.set.ButtonReset03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.moko.mk107dpro.activity.BeaconDFU03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity android:name="com.moko.mk107dpro.activity.AdvertiseIBeacon03Activity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <activity android:name="com.moko.mk107dpro.activity.MeteringSettingsActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <activity android:name="com.moko.mk107dpro.activity.PowerMeteringActivity"
+            android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <service android:name="com.moko.mk107dpro.service.DfuService" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.moko.mk107dpro.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"
+                tools:replace="android:resource" />
+        </provider>
+    </application>
+
+</manifest>
