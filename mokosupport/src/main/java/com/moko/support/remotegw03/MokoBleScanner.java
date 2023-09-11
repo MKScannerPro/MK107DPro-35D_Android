@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.ParcelUuid;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+
 import com.elvishew.xlog.XLog;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.support.remotegw03.callback.MokoScanDeviceCallback;
@@ -17,6 +19,7 @@ import java.util.List;
 import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat;
 import no.nordicsemi.android.support.v18.scanner.ScanCallback;
 import no.nordicsemi.android.support.v18.scanner.ScanFilter;
+import no.nordicsemi.android.support.v18.scanner.ScanRecord;
 import no.nordicsemi.android.support.v18.scanner.ScanResult;
 import no.nordicsemi.android.support.v18.scanner.ScanSettings;
 
@@ -61,31 +64,30 @@ public final class MokoBleScanner {
 
     public static class MokoLeScanHandler extends ScanCallback {
 
-        private MokoScanDeviceCallback callback;
+        private final MokoScanDeviceCallback callback;
 
         public MokoLeScanHandler(MokoScanDeviceCallback callback) {
             this.callback = callback;
         }
 
         @Override
-        public void onScanResult(int callbackType, ScanResult result) {
-            if (result != null) {
-                BluetoothDevice device = result.getDevice();
-                byte[] scanRecord = result.getScanRecord().getBytes();
-                String name = result.getScanRecord().getDeviceName();
-                int rssi = result.getRssi();
-                if (TextUtils.isEmpty(name) || scanRecord.length == 0 || rssi == 127) {
-                    return;
-                }
-                DeviceInfo deviceInfo = new DeviceInfo();
-                deviceInfo.name = name;
-                deviceInfo.rssi = rssi;
-                deviceInfo.mac = device.getAddress();
-                String scanRecordStr = MokoUtils.bytesToHexString(scanRecord);
-                deviceInfo.scanRecord = scanRecordStr;
-                deviceInfo.scanResult = result;
-                callback.onScanDevice(deviceInfo);
+        public void onScanResult(int callbackType, @NonNull ScanResult result) {
+            BluetoothDevice device = result.getDevice();
+            ScanRecord record = result.getScanRecord();
+            if (null == record) return;
+            byte[] scanRecord = record.getBytes();
+            String name = record.getDeviceName();
+            int rssi = result.getRssi();
+            if (null == scanRecord || TextUtils.isEmpty(name) || scanRecord.length == 0 || rssi == 127) {
+                return;
             }
+            DeviceInfo deviceInfo = new DeviceInfo();
+            deviceInfo.name = name;
+            deviceInfo.rssi = rssi;
+            deviceInfo.mac = device.getAddress();
+            deviceInfo.scanRecord = MokoUtils.bytesToHexString(scanRecord);
+            deviceInfo.scanResult = result;
+            callback.onScanDevice(deviceInfo);
         }
     }
 }

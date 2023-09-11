@@ -13,8 +13,8 @@ import com.google.gson.reflect.TypeToken;
 import com.moko.mk107dpro.AppConstants;
 import com.moko.mk107dpro.R;
 import com.moko.mk107dpro.base.BaseActivity;
-import com.moko.mk107dpro.databinding.ActivitySystemTimePro03Binding;
-import com.moko.mk107dpro.dialog.Bottom03Dialog;
+import com.moko.mk107dpro.databinding.ActivitySystemTime107drpoBinding;
+import com.moko.mk107dpro.dialog.Bottom107dProDialog;
 import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.entity.MokoDevice;
 import com.moko.mk107dpro.utils.SPUtiles;
@@ -37,7 +37,7 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class SystemTime03Activity extends BaseActivity<ActivitySystemTimePro03Binding> {
+public class SystemTime03Activity extends BaseActivity<ActivitySystemTime107drpoBinding> {
     private MokoDevice mMokoDevice;
     private MQTTConfig appMqttConfig;
     private String mAppTopic;
@@ -83,8 +83,8 @@ public class SystemTime03Activity extends BaseActivity<ActivitySystemTimePro03Bi
     }
 
     @Override
-    protected ActivitySystemTimePro03Binding getViewBinding() {
-        return ActivitySystemTimePro03Binding.inflate(getLayoutInflater());
+    protected ActivitySystemTime107drpoBinding getViewBinding() {
+        return ActivitySystemTime107drpoBinding.inflate(getLayoutInflater());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -194,7 +194,7 @@ public class SystemTime03Activity extends BaseActivity<ActivitySystemTimePro03Bi
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
-        Intent i = new Intent(this, SyncTimeFromNTP03Activity.class);
+        Intent i = new Intent(this, SyncTimeFromNTP107dProActivity.class);
         i.putExtra(AppConstants.EXTRA_KEY_DEVICE, mMokoDevice);
         startActivity(i);
     }
@@ -213,7 +213,7 @@ public class SystemTime03Activity extends BaseActivity<ActivitySystemTimePro03Bi
     public void onSelectTimeZone(View view) {
         if (isWindowLocked())
             return;
-        Bottom03Dialog dialog = new Bottom03Dialog();
+        Bottom107dProDialog dialog = new Bottom107dProDialog();
         dialog.setDatas(mTimeZones, mSelectedTimeZone);
         dialog.setListener(value -> {
             if (!MQTTSupport03.getInstance().isConnected()) {

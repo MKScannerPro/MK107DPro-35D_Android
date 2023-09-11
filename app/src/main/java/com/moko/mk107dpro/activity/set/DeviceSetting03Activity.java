@@ -19,14 +19,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.moko.mk107dpro.AppConstants;
 import com.moko.mk107dpro.R;
-import com.moko.mk107dpro.activity.AdvertiseIBeacon03Activity;
-import com.moko.mk107dpro.activity.DataReportTimeout03Activity;
-import com.moko.mk107dpro.activity.RemoteMainWithMeteringActivity;
+import com.moko.mk107dpro.activity.AdvertiseIBeacon107dProActivity;
+import com.moko.mk107dpro.activity.DataReportTimeout107dProActivity;
+import com.moko.mk107dpro.activity.Main107dProActivity;
 import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.ActivityDeviceSettingRemote03Binding;
-import com.moko.mk107dpro.db.DBTools03;
-import com.moko.mk107dpro.dialog.AlertMessage03Dialog;
-import com.moko.mk107dpro.dialog.Custom03Dialog;
+import com.moko.mk107dpro.db.DBTools107dPro;
+import com.moko.mk107dpro.dialog.AlertMessageDialog;
+import com.moko.mk107dpro.dialog.CustomDialog;
 import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.entity.MokoDevice;
 import com.moko.mk107dpro.utils.SPUtiles;
@@ -173,12 +173,12 @@ public class DeviceSetting03Activity extends BaseActivity<ActivityDeviceSettingR
                         e.printStackTrace();
                     }
                 }
-                DBTools03.getInstance(this).deleteDevice(mMokoDevice);
+                DBTools107dPro.getInstance(this).deleteDevice(mMokoDevice);
                 EventBus.getDefault().post(new DeviceDeletedEvent(mMokoDevice.id));
                 mBind.tvName.postDelayed(() -> {
                     dismissLoadingProgressDialog();
                     // 跳转首页，刷新数据
-                    Intent intent = new Intent(this, RemoteMainWithMeteringActivity.class);
+                    Intent intent = new Intent(this, Main107dProActivity.class);
                     intent.putExtra(AppConstants.EXTRA_KEY_FROM_ACTIVITY, TAG);
                     startActivity(intent);
                 }, 500);
@@ -191,7 +191,7 @@ public class DeviceSetting03Activity extends BaseActivity<ActivityDeviceSettingR
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onDeviceModifyNameEvent(DeviceModifyNameEvent event) {
         // 修改了设备名称
-        MokoDevice device = DBTools03.getInstance(this).selectDevice(mMokoDevice.mac);
+        MokoDevice device = DBTools107dPro.getInstance(this).selectDevice(mMokoDevice.mac);
         mMokoDevice.name = device.name;
         mBind.tvName.setText(mMokoDevice.name);
     }
@@ -214,7 +214,7 @@ public class DeviceSetting03Activity extends BaseActivity<ActivityDeviceSettingR
         etDeviceName.setText(deviceName);
         etDeviceName.setSelection(deviceName.length());
         etDeviceName.setFilters(new InputFilter[]{filter, new InputFilter.LengthFilter(20)});
-        Custom03Dialog dialog = new Custom03Dialog.Builder(this)
+        CustomDialog dialog = new CustomDialog.Builder(this)
                 .setContentView(content)
                 .setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
@@ -231,7 +231,7 @@ public class DeviceSetting03Activity extends BaseActivity<ActivityDeviceSettingR
                             return;
                         }
                         mMokoDevice.name = name;
-                        DBTools03.getInstance(DeviceSetting03Activity.this).updateDevice(mMokoDevice);
+                        DBTools107dPro.getInstance(DeviceSetting03Activity.this).updateDevice(mMokoDevice);
                         EventBus.getDefault().post(new DeviceModifyNameEvent(mMokoDevice.mac));
                         etDeviceName.setText(name);
                         dialog.dismiss();
@@ -248,7 +248,7 @@ public class DeviceSetting03Activity extends BaseActivity<ActivityDeviceSettingR
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
-        Intent i = new Intent(this, IndicatorSetting03Activity.class);
+        Intent i = new Intent(this, IndicatorSetting107dProActivity.class);
         i.putExtra(AppConstants.EXTRA_KEY_DEVICE, mMokoDevice);
         startActivity(i);
     }
@@ -259,7 +259,7 @@ public class DeviceSetting03Activity extends BaseActivity<ActivityDeviceSettingR
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
-        Intent i = new Intent(this, NetworkReportInterval03Activity.class);
+        Intent i = new Intent(this, NetworkReportInterval107dProActivity.class);
         i.putExtra(AppConstants.EXTRA_KEY_DEVICE, mMokoDevice);
         startActivity(i);
     }
@@ -270,7 +270,7 @@ public class DeviceSetting03Activity extends BaseActivity<ActivityDeviceSettingR
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
-        Intent i = new Intent(this, ReconnectTimeout03Activity.class);
+        Intent i = new Intent(this, ReconnectTimeout107dProActivity.class);
         i.putExtra(AppConstants.EXTRA_KEY_DEVICE, mMokoDevice);
         startActivity(i);
     }
@@ -281,7 +281,7 @@ public class DeviceSetting03Activity extends BaseActivity<ActivityDeviceSettingR
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
-        Intent i = new Intent(this, CommunicationTimeout03Activity.class);
+        Intent i = new Intent(this, CommunicationTimeout107dProActivity.class);
         i.putExtra(AppConstants.EXTRA_KEY_DEVICE, mMokoDevice);
         startActivity(i);
     }
@@ -292,7 +292,7 @@ public class DeviceSetting03Activity extends BaseActivity<ActivityDeviceSettingR
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
-        Intent i = new Intent(this, DataReportTimeout03Activity.class);
+        Intent i = new Intent(this, DataReportTimeout107dProActivity.class);
         i.putExtra(AppConstants.EXTRA_KEY_DEVICE, mMokoDevice);
         startActivity(i);
     }
@@ -314,7 +314,7 @@ public class DeviceSetting03Activity extends BaseActivity<ActivityDeviceSettingR
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
-        Intent i = new Intent(this, ButtonReset03Activity.class);
+        Intent i = new Intent(this, ButtonReset107dProActivity.class);
         i.putExtra(AppConstants.EXTRA_KEY_DEVICE, mMokoDevice);
         startActivity(i);
     }
@@ -354,7 +354,7 @@ public class DeviceSetting03Activity extends BaseActivity<ActivityDeviceSettingR
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
-        Intent intent = new Intent(this, OTA03Activity.class);
+        Intent intent = new Intent(this, OTA107dProActivity.class);
         intent.putExtra(AppConstants.EXTRA_KEY_DEVICE, mMokoDevice);
         startActivity(intent);
     }
@@ -376,7 +376,7 @@ public class DeviceSetting03Activity extends BaseActivity<ActivityDeviceSettingR
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
-        Intent i = new Intent(this, DeviceInfo03Activity.class);
+        Intent i = new Intent(this, DeviceInfo107dProActivity.class);
         i.putExtra(AppConstants.EXTRA_KEY_DEVICE, mMokoDevice);
         startActivity(i);
     }
@@ -387,14 +387,14 @@ public class DeviceSetting03Activity extends BaseActivity<ActivityDeviceSettingR
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
-        Intent i = new Intent(this, AdvertiseIBeacon03Activity.class);
+        Intent i = new Intent(this, AdvertiseIBeacon107dProActivity.class);
         i.putExtra(AppConstants.EXTRA_KEY_DEVICE, mMokoDevice);
         startActivity(i);
     }
 
     public void onRebootDevice(View view) {
         if (isWindowLocked()) return;
-        AlertMessage03Dialog dialog = new AlertMessage03Dialog();
+        AlertMessageDialog dialog = new AlertMessageDialog();
         dialog.setTitle("Reboot Device");
         dialog.setMessage("Please confirm again whether to \n reboot the device");
         dialog.setOnAlertConfirmListener(() -> {
@@ -427,7 +427,7 @@ public class DeviceSetting03Activity extends BaseActivity<ActivityDeviceSettingR
 
     public void onResetDevice(View view) {
         if (isWindowLocked()) return;
-        AlertMessage03Dialog dialog = new AlertMessage03Dialog();
+        AlertMessageDialog dialog = new AlertMessageDialog();
         dialog.setTitle("Reset Device");
         dialog.setMessage("After reset,the device will be removed  from the device list,and relevant data will be totally cleared.");
         dialog.setOnAlertConfirmListener(() -> {

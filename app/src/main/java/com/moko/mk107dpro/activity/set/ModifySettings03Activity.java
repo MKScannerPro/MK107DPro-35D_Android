@@ -17,11 +17,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.moko.mk107dpro.AppConstants;
 import com.moko.mk107dpro.R;
-import com.moko.mk107dpro.activity.RemoteMainWithMeteringActivity;
+import com.moko.mk107dpro.activity.Main107dProActivity;
 import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.ActivityModifySettings03Binding;
-import com.moko.mk107dpro.db.DBTools03;
-import com.moko.mk107dpro.dialog.AlertMessage03Dialog;
+import com.moko.mk107dpro.db.DBTools107dPro;
+import com.moko.mk107dpro.dialog.AlertMessageDialog;
 import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.entity.MokoDevice;
 import com.moko.mk107dpro.utils.SPUtiles;
@@ -139,13 +139,13 @@ public class ModifySettings03Activity extends BaseActivity<ActivityModifySetting
                 mqttConfig.lwtTopic =  mqttDeviceConfig.lwtTopic;
                 mqttConfig.lwtPayload = mqttDeviceConfig.lwtPayload;
                 mMokoDevice.mqttInfo = new Gson().toJson(mqttConfig, MQTTConfig.class);
-                DBTools03.getInstance(this).updateDevice(mMokoDevice);
+                DBTools107dPro.getInstance(this).updateDevice(mMokoDevice);
                 mBind.tvName.postDelayed(() -> {
                     dismissLoadingProgressDialog();
                     mHandler.removeMessages(0);
                     ToastUtils.showToast(ModifySettings03Activity.this, "Set up succeed");
                     // 跳转首页，刷新数据
-                    Intent intent = new Intent(ModifySettings03Activity.this, RemoteMainWithMeteringActivity.class);
+                    Intent intent = new Intent(ModifySettings03Activity.this, Main107dProActivity.class);
                     intent.putExtra(AppConstants.EXTRA_KEY_FROM_ACTIVITY, TAG);
                     intent.putExtra(AppConstants.EXTRA_KEY_MAC, mMokoDevice.mac);
                     startActivity(intent);
@@ -175,7 +175,7 @@ public class ModifySettings03Activity extends BaseActivity<ActivityModifySetting
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
-        Intent i = new Intent(this, ModifyWifiSettings03Activity.class);
+        Intent i = new Intent(this, ModifyWifiSettings107dProActivity.class);
         i.putExtra(AppConstants.EXTRA_KEY_DEVICE, mMokoDevice);
         startActivity(i);
     }
@@ -187,7 +187,7 @@ public class ModifySettings03Activity extends BaseActivity<ActivityModifySetting
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
-        Intent i = new Intent(this, ModifyMQTTSettings03Activity.class);
+        Intent i = new Intent(this, ModifyMQTTSettings107dProActivity.class);
         i.putExtra(AppConstants.EXTRA_KEY_DEVICE, mMokoDevice);
         launcher.launch(i);
     }
@@ -206,7 +206,7 @@ public class ModifySettings03Activity extends BaseActivity<ActivityModifySetting
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
-        Intent i = new Intent(this, ModifyNetworkSettings03Activity.class);
+        Intent i = new Intent(this, ModifyNetworkSettings107dProActivity.class);
         i.putExtra(AppConstants.EXTRA_KEY_DEVICE, mMokoDevice);
         startActivity(i);
     }
@@ -223,7 +223,7 @@ public class ModifySettings03Activity extends BaseActivity<ActivityModifySetting
 
     public void onConnect(View view) {
         if (isWindowLocked()) return;
-        AlertMessage03Dialog dialog = new AlertMessage03Dialog();
+        AlertMessageDialog dialog = new AlertMessageDialog();
         dialog.setMessage("If confirm, device will reboot and use new settings to reconnect");
         dialog.setOnAlertConfirmListener(() -> {
             if (!MQTTSupport03.getInstance().isConnected()) {
