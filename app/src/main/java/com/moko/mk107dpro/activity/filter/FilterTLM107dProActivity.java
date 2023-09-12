@@ -18,8 +18,8 @@ import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.entity.MokoDevice;
 import com.moko.mk107dpro.utils.SPUtiles;
 import com.moko.mk107dpro.utils.ToastUtils;
-import com.moko.support.remotegw03.MQTTConstants03;
-import com.moko.support.remotegw03.MQTTSupport03;
+import com.moko.support.remotegw03.MQTTConstants;
+import com.moko.support.remotegw03.MQTTSupport;
 import com.moko.support.remotegw03.entity.MsgConfigResult;
 import com.moko.support.remotegw03.entity.MsgReadResult;
 import com.moko.support.remotegw03.event.DeviceOnlineEvent;
@@ -83,7 +83,7 @@ public class FilterTLM107dProActivity extends BaseActivity<ActivityFilterTlm107d
             e.printStackTrace();
             return;
         }
-        if (msg_id == MQTTConstants03.READ_MSG_ID_FILTER_TLM) {
+        if (msg_id == MQTTConstants.READ_MSG_ID_FILTER_TLM) {
             Type type = new TypeToken<MsgReadResult<JsonObject>>() {
             }.getType();
             MsgReadResult<JsonObject> result = new Gson().fromJson(message, type);
@@ -95,7 +95,7 @@ public class FilterTLM107dProActivity extends BaseActivity<ActivityFilterTlm107d
             mSelected = result.data.get("tlm_version").getAsInt();
             mBind.tvTlmVersion.setText(mValues.get(mSelected));
         }
-        if (msg_id == MQTTConstants03.CONFIG_MSG_ID_FILTER_TLM) {
+        if (msg_id == MQTTConstants.CONFIG_MSG_ID_FILTER_TLM) {
             Type type = new TypeToken<MsgConfigResult>() {
             }.getType();
             MsgConfigResult result = new Gson().fromJson(message, type);
@@ -117,10 +117,10 @@ public class FilterTLM107dProActivity extends BaseActivity<ActivityFilterTlm107d
     }
 
     private void getFilterTlm() {
-        int msgId = MQTTConstants03.READ_MSG_ID_FILTER_TLM;
+        int msgId = MQTTConstants.READ_MSG_ID_FILTER_TLM;
         String message = assembleReadCommon(msgId, mMokoDevice.mac);
         try {
-            MQTTSupport03.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
+            MQTTSupport.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -142,13 +142,13 @@ public class FilterTLM107dProActivity extends BaseActivity<ActivityFilterTlm107d
 
 
     private void saveParams() {
-        int msgId = MQTTConstants03.CONFIG_MSG_ID_FILTER_TLM;
+        int msgId = MQTTConstants.CONFIG_MSG_ID_FILTER_TLM;
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("switch_value", mBind.cbTlm.isChecked() ? 1 : 0);
         jsonObject.addProperty("tlm_version", mSelected);
         String message = assembleWriteCommonData(msgId, mMokoDevice.mac, jsonObject);
         try {
-            MQTTSupport03.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
+            MQTTSupport.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
         } catch (MqttException e) {
             e.printStackTrace();
         }

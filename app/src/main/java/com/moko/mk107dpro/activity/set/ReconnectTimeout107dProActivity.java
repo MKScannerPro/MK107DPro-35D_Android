@@ -17,8 +17,8 @@ import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.entity.MokoDevice;
 import com.moko.mk107dpro.utils.SPUtiles;
 import com.moko.mk107dpro.utils.ToastUtils;
-import com.moko.support.remotegw03.MQTTConstants03;
-import com.moko.support.remotegw03.MQTTSupport03;
+import com.moko.support.remotegw03.MQTTConstants;
+import com.moko.support.remotegw03.MQTTSupport;
 import com.moko.support.remotegw03.entity.MsgConfigResult;
 import com.moko.support.remotegw03.entity.MsgReadResult;
 import com.moko.support.remotegw03.event.DeviceOnlineEvent;
@@ -72,7 +72,7 @@ public class ReconnectTimeout107dProActivity extends BaseActivity<ActivityReconn
             e.printStackTrace();
             return;
         }
-        if (msg_id == MQTTConstants03.READ_MSG_ID_RECONNECT_TIMEOUT) {
+        if (msg_id == MQTTConstants.READ_MSG_ID_RECONNECT_TIMEOUT) {
             Type type = new TypeToken<MsgReadResult<JsonObject>>() {
             }.getType();
             MsgReadResult<JsonObject> result = new Gson().fromJson(message, type);
@@ -82,7 +82,7 @@ public class ReconnectTimeout107dProActivity extends BaseActivity<ActivityReconn
             mHandler.removeMessages(0);
             mBind.etReconnectTimeout.setText(String.valueOf(result.data.get("timeout").getAsInt()));
         }
-        if (msg_id == MQTTConstants03.CONFIG_MSG_ID_RECONNECT_TIMEOUT) {
+        if (msg_id == MQTTConstants.CONFIG_MSG_ID_RECONNECT_TIMEOUT) {
             Type type = new TypeToken<MsgConfigResult>() {
             }.getType();
             MsgConfigResult result = new Gson().fromJson(message, type);
@@ -108,22 +108,22 @@ public class ReconnectTimeout107dProActivity extends BaseActivity<ActivityReconn
     }
 
     private void setReconnectTimeout(int interval) {
-        int msgId = MQTTConstants03.CONFIG_MSG_ID_RECONNECT_TIMEOUT;
+        int msgId = MQTTConstants.CONFIG_MSG_ID_RECONNECT_TIMEOUT;
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("timeout", interval);
         String message = assembleWriteCommonData(msgId, mMokoDevice.mac, jsonObject);
         try {
-            MQTTSupport03.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
+            MQTTSupport.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
         } catch (MqttException e) {
             e.printStackTrace();
         }
     }
 
     private void getReconnectTimeout() {
-        int msgId = MQTTConstants03.READ_MSG_ID_RECONNECT_TIMEOUT;
+        int msgId = MQTTConstants.READ_MSG_ID_RECONNECT_TIMEOUT;
         String message = assembleReadCommon(msgId, mMokoDevice.mac);
         try {
-            MQTTSupport03.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
+            MQTTSupport.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -141,7 +141,7 @@ public class ReconnectTimeout107dProActivity extends BaseActivity<ActivityReconn
             ToastUtils.showToast(this, "Para Error");
             return;
         }
-        if (!MQTTSupport03.getInstance().isConnected()) {
+        if (!MQTTSupport.getInstance().isConnected()) {
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }

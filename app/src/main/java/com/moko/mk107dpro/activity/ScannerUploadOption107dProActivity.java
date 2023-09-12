@@ -27,8 +27,8 @@ import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.entity.MokoDevice;
 import com.moko.mk107dpro.utils.SPUtiles;
 import com.moko.mk107dpro.utils.ToastUtils;
-import com.moko.support.remotegw03.MQTTConstants03;
-import com.moko.support.remotegw03.MQTTSupport03;
+import com.moko.support.remotegw03.MQTTConstants;
+import com.moko.support.remotegw03.MQTTSupport;
 import com.moko.support.remotegw03.entity.MsgConfigResult;
 import com.moko.support.remotegw03.entity.MsgReadResult;
 import com.moko.support.remotegw03.event.DeviceOnlineEvent;
@@ -100,7 +100,7 @@ public class ScannerUploadOption107dProActivity extends BaseActivity<ActivitySca
             e.printStackTrace();
             return;
         }
-        if (msg_id == MQTTConstants03.READ_MSG_ID_FILTER_RSSI) {
+        if (msg_id == MQTTConstants.READ_MSG_ID_FILTER_RSSI) {
             Type type = new TypeToken<MsgReadResult<JsonObject>>() {
             }.getType();
             MsgReadResult<JsonObject> result = new Gson().fromJson(message, type);
@@ -112,7 +112,7 @@ public class ScannerUploadOption107dProActivity extends BaseActivity<ActivitySca
             mBind.tvRssiFilterTips.setText(getString(R.string.rssi_filter, rssi));
             getFilterRelationship();
         }
-        if (msg_id == MQTTConstants03.READ_MSG_ID_FILTER_RELATIONSHIP) {
+        if (msg_id == MQTTConstants.READ_MSG_ID_FILTER_RELATIONSHIP) {
             Type type = new TypeToken<MsgReadResult<JsonObject>>() {
             }.getType();
             MsgReadResult<JsonObject> result = new Gson().fromJson(message, type);
@@ -123,7 +123,7 @@ public class ScannerUploadOption107dProActivity extends BaseActivity<ActivitySca
             getFilterPhy();
         }
 
-        if (msg_id == MQTTConstants03.READ_MSG_ID_FILTER_PHY) {
+        if (msg_id == MQTTConstants.READ_MSG_ID_FILTER_PHY) {
             Type type = new TypeToken<MsgReadResult<JsonObject>>() {
             }.getType();
             MsgReadResult<JsonObject> result = new Gson().fromJson(message, type);
@@ -133,7 +133,7 @@ public class ScannerUploadOption107dProActivity extends BaseActivity<ActivitySca
             phySelected = result.data.get("phy_filter").getAsInt();
             mBind.tvFilterPhy.setText(phyArr[phySelected]);
         }
-        if (msg_id == MQTTConstants03.CONFIG_MSG_ID_FILTER_RSSI) {
+        if (msg_id == MQTTConstants.CONFIG_MSG_ID_FILTER_RSSI) {
             Type type = new TypeToken<MsgConfigResult>() {
             }.getType();
             MsgConfigResult result = new Gson().fromJson(message, type);
@@ -141,7 +141,7 @@ public class ScannerUploadOption107dProActivity extends BaseActivity<ActivitySca
             if (result.result_code != 0) return;
             setFilterRelationship();
         }
-        if (msg_id == MQTTConstants03.CONFIG_MSG_ID_FILTER_RELATIONSHIP) {
+        if (msg_id == MQTTConstants.CONFIG_MSG_ID_FILTER_RELATIONSHIP) {
             Type type = new TypeToken<MsgConfigResult>() {
             }.getType();
             MsgConfigResult result = new Gson().fromJson(message, type);
@@ -149,7 +149,7 @@ public class ScannerUploadOption107dProActivity extends BaseActivity<ActivitySca
             if (result.result_code != 0) return;
             setFilterPhy();
         }
-        if (msg_id == MQTTConstants03.CONFIG_MSG_ID_FILTER_PHY) {
+        if (msg_id == MQTTConstants.CONFIG_MSG_ID_FILTER_PHY) {
             Type type = new TypeToken<MsgConfigResult>() {
             }.getType();
             MsgConfigResult result = new Gson().fromJson(message, type);
@@ -185,66 +185,66 @@ public class ScannerUploadOption107dProActivity extends BaseActivity<ActivitySca
     }
 
     private void getFilterRSSI() {
-        int msgId = MQTTConstants03.READ_MSG_ID_FILTER_RSSI;
+        int msgId = MQTTConstants.READ_MSG_ID_FILTER_RSSI;
         String message = assembleReadCommon(msgId, mMokoDevice.mac);
         try {
-            MQTTSupport03.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
+            MQTTSupport.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
         } catch (MqttException e) {
             e.printStackTrace();
         }
     }
 
     private void setFilterRSSI() {
-        int msgId = MQTTConstants03.CONFIG_MSG_ID_FILTER_RSSI;
+        int msgId = MQTTConstants.CONFIG_MSG_ID_FILTER_RSSI;
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("rssi", mBind.sbRssiFilter.getProgress() - 127);
         String message = assembleWriteCommonData(msgId, mMokoDevice.mac, jsonObject);
         try {
-            MQTTSupport03.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
+            MQTTSupport.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
         } catch (MqttException e) {
             e.printStackTrace();
         }
     }
 
     private void getFilterRelationship() {
-        int msgId = MQTTConstants03.READ_MSG_ID_FILTER_RELATIONSHIP;
+        int msgId = MQTTConstants.READ_MSG_ID_FILTER_RELATIONSHIP;
         String message = assembleReadCommon(msgId, mMokoDevice.mac);
         try {
-            MQTTSupport03.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
+            MQTTSupport.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
         } catch (MqttException e) {
             e.printStackTrace();
         }
     }
 
     private void getFilterPhy() {
-        int msgId = MQTTConstants03.READ_MSG_ID_FILTER_PHY;
+        int msgId = MQTTConstants.READ_MSG_ID_FILTER_PHY;
         String message = assembleReadCommon(msgId, mMokoDevice.mac);
         try {
-            MQTTSupport03.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
+            MQTTSupport.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
         } catch (MqttException e) {
             e.printStackTrace();
         }
     }
 
     private void setFilterRelationship() {
-        int msgId = MQTTConstants03.CONFIG_MSG_ID_FILTER_RELATIONSHIP;
+        int msgId = MQTTConstants.CONFIG_MSG_ID_FILTER_RELATIONSHIP;
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("relation", mRelationshipSelected);
         String message = assembleWriteCommonData(msgId, mMokoDevice.mac, jsonObject);
         try {
-            MQTTSupport03.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
+            MQTTSupport.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
         } catch (MqttException e) {
             e.printStackTrace();
         }
     }
 
     private void setFilterPhy() {
-        int msgId = MQTTConstants03.CONFIG_MSG_ID_FILTER_PHY;
+        int msgId = MQTTConstants.CONFIG_MSG_ID_FILTER_PHY;
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("phy_filter", phySelected);
         String message = assembleWriteCommonData(msgId, mMokoDevice.mac, jsonObject);
         try {
-            MQTTSupport03.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
+            MQTTSupport.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -264,7 +264,7 @@ public class ScannerUploadOption107dProActivity extends BaseActivity<ActivitySca
 
     public void onDuplicateDataFilter(View view) {
         if (isWindowLocked()) return;
-        if (!MQTTSupport03.getInstance().isConnected()) {
+        if (!MQTTSupport.getInstance().isConnected()) {
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
@@ -275,7 +275,7 @@ public class ScannerUploadOption107dProActivity extends BaseActivity<ActivitySca
 
     public void onUploadDataOption(View view) {
         if (isWindowLocked()) return;
-        if (!MQTTSupport03.getInstance().isConnected()) {
+        if (!MQTTSupport.getInstance().isConnected()) {
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
@@ -286,7 +286,7 @@ public class ScannerUploadOption107dProActivity extends BaseActivity<ActivitySca
 
     public void onFilterByMac(View view) {
         if (isWindowLocked()) return;
-        if (!MQTTSupport03.getInstance().isConnected()) {
+        if (!MQTTSupport.getInstance().isConnected()) {
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
@@ -297,7 +297,7 @@ public class ScannerUploadOption107dProActivity extends BaseActivity<ActivitySca
 
     public void onFilterByName(View view) {
         if (isWindowLocked()) return;
-        if (!MQTTSupport03.getInstance().isConnected()) {
+        if (!MQTTSupport.getInstance().isConnected()) {
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
@@ -308,7 +308,7 @@ public class ScannerUploadOption107dProActivity extends BaseActivity<ActivitySca
 
     public void onFilterByRawData(View view) {
         if (isWindowLocked()) return;
-        if (!MQTTSupport03.getInstance().isConnected()) {
+        if (!MQTTSupport.getInstance().isConnected()) {
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
@@ -319,7 +319,7 @@ public class ScannerUploadOption107dProActivity extends BaseActivity<ActivitySca
 
     public void onSave(View view) {
         if (isWindowLocked()) return;
-        if (!MQTTSupport03.getInstance().isConnected()) {
+        if (!MQTTSupport.getInstance().isConnected()) {
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }

@@ -28,7 +28,7 @@ import com.moko.mk107dpro.utils.FileUtils;
 import com.moko.mk107dpro.utils.SPUtiles;
 import com.moko.mk107dpro.utils.ToastUtils;
 import com.moko.mk107dpro.utils.Utils;
-import com.moko.support.remotegw03.MQTTSupport03;
+import com.moko.support.remotegw03.MQTTSupport;
 import com.moko.support.remotegw03.event.MQTTConnectionCompleteEvent;
 import com.moko.support.remotegw03.event.MQTTConnectionFailureEvent;
 
@@ -196,11 +196,11 @@ public class SetAppMQTT107dProActivity extends BaseActivity<ActivityMqttApp107dp
         if (isParaError()) return;
         String mqttConfigStr = new Gson().toJson(mqttConfig, MQTTConfig.class);
         SPUtiles.setStringValue(this, AppConstants.SP_KEY_MQTT_CONFIG_APP, mqttConfigStr);
-        MQTTSupport03.getInstance().disconnectMqtt();
+        MQTTSupport.getInstance().disconnectMqtt();
         showLoadingProgressDialog();
         mBind.etMqttHost.postDelayed(() -> {
             try {
-                MQTTSupport03.getInstance().connectMqtt(mqttConfigStr);
+                MQTTSupport.getInstance().connectMqtt(mqttConfigStr);
             } catch (FileNotFoundException e) {
                 dismissLoadingProgressDialog();
                 ToastUtils.showToast(this, "The SSL certificates path is invalid, please select a valid file path and save it.");

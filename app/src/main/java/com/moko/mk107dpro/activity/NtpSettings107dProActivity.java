@@ -12,7 +12,7 @@ import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.ActivityNtpSettings107dproBinding;
 import com.moko.mk107dpro.dialog.Bottom107dProDialog;
 import com.moko.mk107dpro.utils.ToastUtils;
-import com.moko.support.remotegw03.MokoSupport03;
+import com.moko.support.remotegw03.MokoSupport;
 import com.moko.support.remotegw03.OrderTaskAssembler;
 import com.moko.support.remotegw03.entity.OrderCHAR;
 import com.moko.support.remotegw03.entity.ParamsKeyEnum;
@@ -65,7 +65,7 @@ public class NtpSettings107dProActivity extends BaseActivity<ActivityNtpSettings
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getNtpUrl());
             orderTasks.add(OrderTaskAssembler.getTimezone());
-            MokoSupport03.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
 
@@ -168,7 +168,7 @@ public class NtpSettings107dProActivity extends BaseActivity<ActivityNtpSettings
         List<OrderTask> orderTasks = new ArrayList<>();
         orderTasks.add(OrderTaskAssembler.setNtpUrl(ntpServer));
         orderTasks.add(OrderTaskAssembler.setTimezone(mSelected - 24));
-        MokoSupport03.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     public void onBack(View view) {

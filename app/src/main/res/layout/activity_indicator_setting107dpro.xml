@@ -85,4 +85,16 @@
         android:text="Server connected indicator" />
 
     <View style="@style/divider_line" />
+
+    <CheckBox
+        android:id="@+id/cbPowerLed"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:button="@null"
+        android:drawableRight="@drawable/selector_cb_btn"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:text="Power LED" />
+
+    <View style="@style/divider_line" />
 </LinearLayout>

@@ -19,8 +19,8 @@ import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.entity.MokoDevice;
 import com.moko.mk107dpro.utils.SPUtiles;
 import com.moko.mk107dpro.utils.ToastUtils;
-import com.moko.support.remotegw03.MQTTConstants03;
-import com.moko.support.remotegw03.MQTTSupport03;
+import com.moko.support.remotegw03.MQTTConstants;
+import com.moko.support.remotegw03.MQTTSupport;
 import com.moko.support.remotegw03.entity.MsgConfigResult;
 import com.moko.support.remotegw03.entity.MsgReadResult;
 import com.moko.support.remotegw03.event.DeviceOnlineEvent;
@@ -37,7 +37,7 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class SystemTime03Activity extends BaseActivity<ActivitySystemTime107drpoBinding> {
+public class SystemTime107dProActivity extends BaseActivity<ActivitySystemTime107drpoBinding> {
     private MokoDevice mMokoDevice;
     private MQTTConfig appMqttConfig;
     private String mAppTopic;
@@ -103,7 +103,7 @@ public class SystemTime03Activity extends BaseActivity<ActivitySystemTime107drpo
             e.printStackTrace();
             return;
         }
-        if (msg_id == MQTTConstants03.READ_MSG_ID_SYSTEM_TIME) {
+        if (msg_id == MQTTConstants.READ_MSG_ID_SYSTEM_TIME) {
             Type type = new TypeToken<MsgReadResult<JsonObject>>() {
             }.getType();
             MsgReadResult<JsonObject> result = new Gson().fromJson(message, type);
@@ -132,7 +132,7 @@ public class SystemTime03Activity extends BaseActivity<ActivitySystemTime107drpo
                 getSystemTime();
             }, 30 * 1000);
         }
-        if (msg_id == MQTTConstants03.CONFIG_MSG_ID_SYSTEM_TIME) {
+        if (msg_id == MQTTConstants.CONFIG_MSG_ID_SYSTEM_TIME) {
             Type type = new TypeToken<MsgConfigResult>() {
             }.getType();
             MsgConfigResult result = new Gson().fromJson(message, type);
@@ -164,13 +164,13 @@ public class SystemTime03Activity extends BaseActivity<ActivitySystemTime107drpo
     }
 
     private void setSystemTime() {
-        int msgId = MQTTConstants03.CONFIG_MSG_ID_SYSTEM_TIME;
+        int msgId = MQTTConstants.CONFIG_MSG_ID_SYSTEM_TIME;
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("timestamp", Calendar.getInstance().getTimeInMillis() / 1000);
         jsonObject.addProperty("timezone", mSelectedTimeZone - 24);
         String message = assembleWriteCommonData(msgId, mMokoDevice.mac, jsonObject);
         try {
-            MQTTSupport03.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
+            MQTTSupport.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -178,10 +178,10 @@ public class SystemTime03Activity extends BaseActivity<ActivitySystemTime107drpo
 
 
     private void getSystemTime() {
-        int msgId = MQTTConstants03.READ_MSG_ID_SYSTEM_TIME;
+        int msgId = MQTTConstants.READ_MSG_ID_SYSTEM_TIME;
         String message = assembleReadCommon(msgId, mMokoDevice.mac);
         try {
-            MQTTSupport03.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
+            MQTTSupport.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -190,7 +190,7 @@ public class SystemTime03Activity extends BaseActivity<ActivitySystemTime107drpo
     public void onSyncTimeFromNTP(View view) {
         if (isWindowLocked())
             return;
-        if (!MQTTSupport03.getInstance().isConnected()) {
+        if (!MQTTSupport.getInstance().isConnected()) {
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
@@ -216,7 +216,7 @@ public class SystemTime03Activity extends BaseActivity<ActivitySystemTime107drpo
         Bottom107dProDialog dialog = new Bottom107dProDialog();
         dialog.setDatas(mTimeZones, mSelectedTimeZone);
         dialog.setListener(value -> {
-            if (!MQTTSupport03.getInstance().isConnected()) {
+            if (!MQTTSupport.getInstance().isConnected()) {
                 ToastUtils.showToast(this, R.string.network_error);
                 return;
             }

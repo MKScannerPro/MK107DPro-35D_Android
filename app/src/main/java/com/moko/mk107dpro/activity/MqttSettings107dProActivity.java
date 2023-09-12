@@ -32,7 +32,7 @@ import com.moko.mk107dpro.fragment.UserDevice107dProFragment;
 import com.moko.mk107dpro.utils.FileUtils;
 import com.moko.mk107dpro.utils.ToastUtils;
 import com.moko.mk107dpro.utils.Utils;
-import com.moko.support.remotegw03.MokoSupport03;
+import com.moko.support.remotegw03.MokoSupport;
 import com.moko.support.remotegw03.OrderTaskAssembler;
 import com.moko.support.remotegw03.entity.OrderCHAR;
 import com.moko.support.remotegw03.entity.ParamsKeyEnum;
@@ -124,7 +124,7 @@ public class MqttSettings107dProActivity extends BaseActivity<ActivityMqttDevice
             orderTasks.add(OrderTaskAssembler.getMQTTLwtQos());
             orderTasks.add(OrderTaskAssembler.getMQTTLwtTopic());
             orderTasks.add(OrderTaskAssembler.getMQTTLwtPayload());
-            MokoSupport03.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
 
     }
@@ -490,7 +490,7 @@ public class MqttSettings107dProActivity extends BaseActivity<ActivityMqttDevice
                 File caFile = new File(mqttDeviceConfig.caPath);
                 orderTasks.add(OrderTaskAssembler.setCA(caFile));
             }
-            MokoSupport03.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         } catch (Exception e) {
             ToastUtils.showToast(this, "File is missing");
         }

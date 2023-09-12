@@ -67,10 +67,10 @@ import javax.net.ssl.X509TrustManager;
 import info.mqtt.android.service.Ack;
 import info.mqtt.android.service.MqttAndroidClient;
 
-public class MQTTSupport03 {
+public class MQTTSupport {
     private static final String TAG = "MQTTSupport";
 
-    private static volatile MQTTSupport03 INSTANCE;
+    private static volatile MQTTSupport INSTANCE;
 
     private Context mContext;
 
@@ -80,15 +80,15 @@ public class MQTTSupport03 {
     private IMqttActionListener listener;
     private Handler mHandler;
 
-    private MQTTSupport03() {
+    private MQTTSupport() {
         //no instance
     }
 
-    public static MQTTSupport03 getInstance() {
+    public static MQTTSupport getInstance() {
         if (INSTANCE == null) {
-            synchronized (MQTTSupport03.class) {
+            synchronized (MQTTSupport.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new MQTTSupport03();
+                    INSTANCE = new MQTTSupport();
                 }
             }
         }

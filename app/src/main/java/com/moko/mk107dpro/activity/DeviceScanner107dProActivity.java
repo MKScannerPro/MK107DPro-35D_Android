@@ -27,7 +27,7 @@ import com.moko.mk107dpro.dialog.PasswordDialog;
 import com.moko.mk107dpro.utils.SPUtiles;
 import com.moko.mk107dpro.utils.ToastUtils;
 import com.moko.support.remotegw03.MokoBleScanner;
-import com.moko.support.remotegw03.MokoSupport03;
+import com.moko.support.remotegw03.MokoSupport;
 import com.moko.support.remotegw03.OrderTaskAssembler;
 import com.moko.support.remotegw03.callback.MokoScanDeviceCallback;
 import com.moko.support.remotegw03.entity.DeviceInfo;
@@ -142,9 +142,9 @@ public class DeviceScanner107dProActivity extends BaseActivity<ActivityScanner10
     }
 
     private void startScan() {
-        if (!MokoSupport03.getInstance().isBluetoothOpen()) {
+        if (!MokoSupport.getInstance().isBluetoothOpen()) {
             // 蓝牙未打开，开启蓝牙
-            MokoSupport03.getInstance().enableBluetooth();
+            MokoSupport.getInstance().enableBluetooth();
             return;
         }
         animation = AnimationUtils.loadAnimation(this, R.anim.rotate_refresh);
@@ -180,8 +180,8 @@ public class DeviceScanner107dProActivity extends BaseActivity<ActivityScanner10
             dialog.setOnPasswordClicked(new PasswordDialog.PasswordClickListener() {
                 @Override
                 public void onEnsureClicked(String password) {
-                    if (!MokoSupport03.getInstance().isBluetoothOpen()) {
-                        MokoSupport03.getInstance().enableBluetooth();
+                    if (!MokoSupport.getInstance().isBluetoothOpen()) {
+                        MokoSupport.getInstance().enableBluetooth();
                         return;
                     }
                     XLog.i(password);
@@ -192,7 +192,7 @@ public class DeviceScanner107dProActivity extends BaseActivity<ActivityScanner10
                         mokoBleScanner.stopScanDevice();
                     }
                     showLoadingProgressDialog();
-                    mBind.ivRefresh.postDelayed(() -> MokoSupport03.getInstance().connDevice(deviceInfo.mac), 500);
+                    mBind.ivRefresh.postDelayed(() -> MokoSupport.getInstance().connDevice(deviceInfo.mac), 500);
                 }
 
                 @Override
@@ -231,7 +231,7 @@ public class DeviceScanner107dProActivity extends BaseActivity<ActivityScanner10
                 // open password notify and set password
                 List<OrderTask> orderTasks = new ArrayList<>();
                 orderTasks.add(OrderTaskAssembler.setPassword(mPassword));
-                MokoSupport03.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+                MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
             }, 500);
         }
     }
@@ -245,7 +245,7 @@ public class DeviceScanner107dProActivity extends BaseActivity<ActivityScanner10
             int responseType = response.responseType;
             byte[] value = response.responseValue;
             if (orderCHAR == OrderCHAR.CHAR_PASSWORD) {
-                MokoSupport03.getInstance().disConnectBle();
+                MokoSupport.getInstance().disConnectBle();
             }
         }
         if (MokoConstants.ACTION_ORDER_RESULT.equals(action)) {
@@ -277,7 +277,7 @@ public class DeviceScanner107dProActivity extends BaseActivity<ActivityScanner10
                         if (0 == result) {
                             isPasswordError = true;
                             ToastUtils.showToast(this, "Password Error");
-                            MokoSupport03.getInstance().disConnectBle();
+                            MokoSupport.getInstance().disConnectBle();
                         }
                     }
                 }

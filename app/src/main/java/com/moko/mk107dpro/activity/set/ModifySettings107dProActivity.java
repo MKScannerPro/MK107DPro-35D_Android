@@ -19,15 +19,15 @@ import com.moko.mk107dpro.AppConstants;
 import com.moko.mk107dpro.R;
 import com.moko.mk107dpro.activity.Main107dProActivity;
 import com.moko.mk107dpro.base.BaseActivity;
-import com.moko.mk107dpro.databinding.ActivityModifySettings03Binding;
+import com.moko.mk107dpro.databinding.ActivityModifySettings107dproBinding;
 import com.moko.mk107dpro.db.DBTools107dPro;
 import com.moko.mk107dpro.dialog.AlertMessageDialog;
 import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.entity.MokoDevice;
 import com.moko.mk107dpro.utils.SPUtiles;
 import com.moko.mk107dpro.utils.ToastUtils;
-import com.moko.support.remotegw03.MQTTConstants03;
-import com.moko.support.remotegw03.MQTTSupport03;
+import com.moko.support.remotegw03.MQTTConstants;
+import com.moko.support.remotegw03.MQTTSupport;
 import com.moko.support.remotegw03.entity.MsgConfigResult;
 import com.moko.support.remotegw03.entity.MsgReadResult;
 import com.moko.support.remotegw03.event.DeviceOnlineEvent;
@@ -39,8 +39,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Type;
 
-public class ModifySettings03Activity extends BaseActivity<ActivityModifySettings03Binding> {
-    public static String TAG = ModifySettings03Activity.class.getSimpleName();
+public class ModifySettings107dProActivity extends BaseActivity<ActivityModifySettings107dproBinding> {
+    public static String TAG = ModifySettings107dProActivity.class.getSimpleName();
     private MokoDevice mMokoDevice;
     private MQTTConfig appMqttConfig;
     private String mAppTopic;
@@ -66,8 +66,8 @@ public class ModifySettings03Activity extends BaseActivity<ActivityModifySetting
     }
 
     @Override
-    protected ActivityModifySettings03Binding getViewBinding() {
-        return ActivityModifySettings03Binding.inflate(getLayoutInflater());
+    protected ActivityModifySettings107dproBinding getViewBinding() {
+        return ActivityModifySettings107dproBinding.inflate(getLayoutInflater());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -86,7 +86,7 @@ public class ModifySettings03Activity extends BaseActivity<ActivityModifySetting
             e.printStackTrace();
             return;
         }
-        if (msg_id == MQTTConstants03.READ_MSG_ID_MQTT_SETTINGS) {
+        if (msg_id == MQTTConstants.READ_MSG_ID_MQTT_SETTINGS) {
             Type type = new TypeToken<MsgReadResult<JsonObject>>() {
             }.getType();
             MsgReadResult<JsonObject> result = new Gson().fromJson(message, type);
@@ -110,7 +110,7 @@ public class ModifySettings03Activity extends BaseActivity<ActivityModifySetting
             mqttDeviceConfig.lwtTopic = result.data.get("lwt_topic").getAsString();
             mqttDeviceConfig.lwtPayload = result.data.get("lwt_payload").getAsString();
         }
-        if (msg_id == MQTTConstants03.CONFIG_MSG_ID_REBOOT) {
+        if (msg_id == MQTTConstants.CONFIG_MSG_ID_REBOOT) {
             Type type = new TypeToken<MsgConfigResult>() {
             }.getType();
             MsgConfigResult result = new Gson().fromJson(message, type);
@@ -143,9 +143,9 @@ public class ModifySettings03Activity extends BaseActivity<ActivityModifySetting
                 mBind.tvName.postDelayed(() -> {
                     dismissLoadingProgressDialog();
                     mHandler.removeMessages(0);
-                    ToastUtils.showToast(ModifySettings03Activity.this, "Set up succeed");
+                    ToastUtils.showToast(ModifySettings107dProActivity.this, "Set up succeed");
                     // 跳转首页，刷新数据
-                    Intent intent = new Intent(ModifySettings03Activity.this, Main107dProActivity.class);
+                    Intent intent = new Intent(ModifySettings107dProActivity.this, Main107dProActivity.class);
                     intent.putExtra(AppConstants.EXTRA_KEY_FROM_ACTIVITY, TAG);
                     intent.putExtra(AppConstants.EXTRA_KEY_MAC, mMokoDevice.mac);
                     startActivity(intent);
@@ -171,7 +171,7 @@ public class ModifySettings03Activity extends BaseActivity<ActivityModifySetting
     public void onWifiSettings(View view) {
         if (isWindowLocked())
             return;
-        if (!MQTTSupport03.getInstance().isConnected()) {
+        if (!MQTTSupport.getInstance().isConnected()) {
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
@@ -183,7 +183,7 @@ public class ModifySettings03Activity extends BaseActivity<ActivityModifySetting
     public void onMqttSettings(View view) {
         if (isWindowLocked())
             return;
-        if (!MQTTSupport03.getInstance().isConnected()) {
+        if (!MQTTSupport.getInstance().isConnected()) {
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
@@ -202,7 +202,7 @@ public class ModifySettings03Activity extends BaseActivity<ActivityModifySetting
 
     public void onNetworkSettings(View view) {
         if (isWindowLocked()) return;
-        if (!MQTTSupport03.getInstance().isConnected()) {
+        if (!MQTTSupport.getInstance().isConnected()) {
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
@@ -212,10 +212,10 @@ public class ModifySettings03Activity extends BaseActivity<ActivityModifySetting
     }
 
     private void getMqttSettings() {
-        int msgId = MQTTConstants03.READ_MSG_ID_MQTT_SETTINGS;
+        int msgId = MQTTConstants.READ_MSG_ID_MQTT_SETTINGS;
         String message = assembleReadCommon(msgId, mMokoDevice.mac);
         try {
-            MQTTSupport03.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
+            MQTTSupport.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -226,7 +226,7 @@ public class ModifySettings03Activity extends BaseActivity<ActivityModifySetting
         AlertMessageDialog dialog = new AlertMessageDialog();
         dialog.setMessage("If confirm, device will reboot and use new settings to reconnect");
         dialog.setOnAlertConfirmListener(() -> {
-            if (!MQTTSupport03.getInstance().isConnected()) {
+            if (!MQTTSupport.getInstance().isConnected()) {
                 ToastUtils.showToast(this, R.string.network_error);
                 return;
             }
@@ -242,12 +242,12 @@ public class ModifySettings03Activity extends BaseActivity<ActivityModifySetting
 
     private void rebootDevice() {
         XLog.i("重启设备");
-        int msgId = MQTTConstants03.CONFIG_MSG_ID_REBOOT;
+        int msgId = MQTTConstants.CONFIG_MSG_ID_REBOOT;
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("reset", 0);
         String message = assembleWriteCommonData(msgId, mMokoDevice.mac, jsonObject);
         try {
-            MQTTSupport03.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
+            MQTTSupport.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
         } catch (MqttException e) {
             e.printStackTrace();
         }

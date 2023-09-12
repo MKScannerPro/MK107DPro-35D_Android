@@ -14,7 +14,7 @@ import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.ActivityNetworkSettings107dproBinding;
 import com.moko.mk107dpro.utils.ToastUtils;
-import com.moko.support.remotegw03.MokoSupport03;
+import com.moko.support.remotegw03.MokoSupport;
 import com.moko.support.remotegw03.OrderTaskAssembler;
 import com.moko.support.remotegw03.entity.OrderCHAR;
 import com.moko.support.remotegw03.entity.ParamsKeyEnum;
@@ -42,7 +42,7 @@ public class NetworkSettings107dProActivity extends BaseActivity<ActivityNetwork
             List<OrderTask> orderTasks = new ArrayList<>();
             orderTasks.add(OrderTaskAssembler.getNetworkDHCP());
             orderTasks.add(OrderTaskAssembler.getNetworkIPInfo());
-            MokoSupport03.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
 
@@ -219,7 +219,7 @@ public class NetworkSettings107dProActivity extends BaseActivity<ActivityNetwork
             orderTasks.add(OrderTaskAssembler.setNetworkIPInfo(ipHex, maskHex, gatewayHex, dnsHex));
         }
         orderTasks.add(OrderTaskAssembler.setNetworkDHCP(mBind.cbDhcp.isChecked() ? 1 : 0));
-        MokoSupport03.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
 
     }
 

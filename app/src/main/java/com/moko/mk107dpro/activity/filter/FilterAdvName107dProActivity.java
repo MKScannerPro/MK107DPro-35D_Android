@@ -25,8 +25,8 @@ import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.entity.MokoDevice;
 import com.moko.mk107dpro.utils.SPUtiles;
 import com.moko.mk107dpro.utils.ToastUtils;
-import com.moko.support.remotegw03.MQTTConstants03;
-import com.moko.support.remotegw03.MQTTSupport03;
+import com.moko.support.remotegw03.MQTTConstants;
+import com.moko.support.remotegw03.MQTTSupport;
 import com.moko.support.remotegw03.entity.MsgConfigResult;
 import com.moko.support.remotegw03.entity.MsgReadResult;
 import com.moko.support.remotegw03.event.DeviceOnlineEvent;
@@ -99,7 +99,7 @@ public class FilterAdvName107dProActivity extends BaseActivity<ActivityFilterAdv
             e.printStackTrace();
             return;
         }
-        if (msg_id == MQTTConstants03.READ_MSG_ID_FILTER_ADV_NAME) {
+        if (msg_id == MQTTConstants.READ_MSG_ID_FILTER_ADV_NAME) {
             Type type = new TypeToken<MsgReadResult<JsonObject>>() {
             }.getType();
             MsgReadResult<JsonObject> result = new Gson().fromJson(message, type);
@@ -128,7 +128,7 @@ public class FilterAdvName107dProActivity extends BaseActivity<ActivityFilterAdv
                 }
             }
         }
-        if (msg_id == MQTTConstants03.CONFIG_MSG_ID_FILTER_ADV_NAME) {
+        if (msg_id == MQTTConstants.CONFIG_MSG_ID_FILTER_ADV_NAME) {
             Type type = new TypeToken<MsgConfigResult>() {
             }.getType();
             MsgConfigResult result = new Gson().fromJson(message, type);
@@ -154,10 +154,10 @@ public class FilterAdvName107dProActivity extends BaseActivity<ActivityFilterAdv
     }
 
     private void getFilterAdvName() {
-        int msgId = MQTTConstants03.READ_MSG_ID_FILTER_ADV_NAME;
+        int msgId = MQTTConstants.READ_MSG_ID_FILTER_ADV_NAME;
         String message = assembleReadCommon(msgId, mMokoDevice.mac);
         try {
-            MQTTSupport03.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
+            MQTTSupport.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -213,7 +213,7 @@ public class FilterAdvName107dProActivity extends BaseActivity<ActivityFilterAdv
 
 
     private void saveParams() {
-        int msgId = MQTTConstants03.CONFIG_MSG_ID_FILTER_ADV_NAME;
+        int msgId = MQTTConstants.CONFIG_MSG_ID_FILTER_ADV_NAME;
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("precise", mBind.cbPreciseMatch.isChecked() ? 1 : 0);
         jsonObject.addProperty("reverse", mBind.cbReverseFilter.isChecked() ? 1 : 0);
@@ -223,7 +223,7 @@ public class FilterAdvName107dProActivity extends BaseActivity<ActivityFilterAdv
         jsonObject.add("name", macList);
         String message = assembleWriteCommonData(msgId, mMokoDevice.mac, jsonObject);
         try {
-            MQTTSupport03.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
+            MQTTSupport.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
         } catch (MqttException e) {
             e.printStackTrace();
         }

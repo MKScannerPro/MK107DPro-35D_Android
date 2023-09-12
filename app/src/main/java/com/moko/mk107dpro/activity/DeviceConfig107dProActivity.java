@@ -29,9 +29,9 @@ import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.entity.MokoDevice;
 import com.moko.mk107dpro.utils.SPUtiles;
 import com.moko.mk107dpro.utils.ToastUtils;
-import com.moko.support.remotegw03.MQTTConstants03;
-import com.moko.support.remotegw03.MQTTSupport03;
-import com.moko.support.remotegw03.MokoSupport03;
+import com.moko.support.remotegw03.MQTTConstants;
+import com.moko.support.remotegw03.MQTTSupport;
+import com.moko.support.remotegw03.MokoSupport;
 import com.moko.support.remotegw03.OrderTaskAssembler;
 import com.moko.support.remotegw03.entity.MsgNotify;
 import com.moko.support.remotegw03.entity.OrderCHAR;
@@ -93,7 +93,6 @@ public class DeviceConfig107dProActivity extends BaseActivity<ActivityDeviceConf
         if (MokoConstants.ACTION_ORDER_RESULT.equals(action)) {
             OrderTaskResponse response = event.getResponse();
             OrderCHAR orderCHAR = (OrderCHAR) response.orderCHAR;
-            int responseType = response.responseType;
             byte[] value = response.responseValue;
             if (orderCHAR == OrderCHAR.CHAR_PARAMS) {
                 if (value.length >= 4) {
@@ -142,7 +141,7 @@ public class DeviceConfig107dProActivity extends BaseActivity<ActivityDeviceConf
             e.printStackTrace();
             return;
         }
-        if (msg_id != MQTTConstants03.NOTIFY_MSG_ID_NETWORKING_STATUS) return;
+        if (msg_id != MQTTConstants.NOTIFY_MSG_ID_NETWORKING_STATUS) return;
         Type type = new TypeToken<MsgNotify<Object>>() {
         }.getType();
         MsgNotify<Object> msgNotify = new Gson().fromJson(message, type);
@@ -201,17 +200,12 @@ public class DeviceConfig107dProActivity extends BaseActivity<ActivityDeviceConf
     }
 
     private void back() {
-        MokoSupport03.getInstance().disConnectBle();
+        MokoSupport.getInstance().disConnectBle();
     }
 
-    public void onAdvertiseIBeacon(View view){
+    public void onAdvertiseIBeacon(View view) {
         if (isWindowLocked()) return;
         startActivity(new Intent(this, AdvertiseIBeacon107dProActivity.class));
-    }
-
-    public void onMeteringSettings(View view){
-        if (isWindowLocked()) return;
-        startActivity(new Intent(this, MeteringSettings107dProActivity.class));
     }
 
     public void onWifiSettings(View view) {
@@ -257,7 +251,7 @@ public class DeviceConfig107dProActivity extends BaseActivity<ActivityDeviceConf
             return;
         }
         showLoadingProgressDialog();
-        MokoSupport03.getInstance().sendOrder(OrderTaskAssembler.exitConfigMode());
+        MokoSupport.getInstance().sendOrder(OrderTaskAssembler.exitConfigMode());
     }
 
     private final ActivityResultLauncher<Intent> startWIFISettings = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -265,7 +259,7 @@ public class DeviceConfig107dProActivity extends BaseActivity<ActivityDeviceConf
             mIsWIFIConfigFinished = true;
     });
     private final ActivityResultLauncher<Intent> startMQTTSettings = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-        if (result.getResultCode() == RESULT_OK) {
+        if (result.getResultCode() == RESULT_OK && null != result.getData()) {
             mIsMQTTConfigFinished = true;
             mDeviceMqttConfig = (MQTTConfig) result.getData().getSerializableExtra(AppConstants.EXTRA_KEY_MQTT_CONFIG_DEVICE);
         }
@@ -274,7 +268,7 @@ public class DeviceConfig107dProActivity extends BaseActivity<ActivityDeviceConf
 
     private void showConnMqttDialog() {
         isDeviceConnectSuccess = false;
-        View view = LayoutInflater.from(this).inflate(R.layout.mqtt_conn_content, null);
+        View view = LayoutInflater.from(this).inflate(R.layout.mqtt_conn_content, mBind.getRoot(), false);
         donutProgress = view.findViewById(R.id.dp_progress);
         mqttConnDialog = new CustomDialog.Builder(this)
                 .setContentView(view)
@@ -320,7 +314,7 @@ public class DeviceConfig107dProActivity extends BaseActivity<ActivityDeviceConf
         // 订阅
         try {
             if (TextUtils.isEmpty(mAppMqttConfig.topicSubscribe)) {
-                MQTTSupport03.getInstance().subscribe(mDeviceMqttConfig.topicPublish, mAppMqttConfig.qos);
+                MQTTSupport.getInstance().subscribe(mDeviceMqttConfig.topicPublish, mAppMqttConfig.qos);
             }
         } catch (MqttException e) {
             e.printStackTrace();
@@ -330,7 +324,7 @@ public class DeviceConfig107dProActivity extends BaseActivity<ActivityDeviceConf
             if (mDeviceMqttConfig.lwtEnable
                     && !TextUtils.isEmpty(mDeviceMqttConfig.lwtTopic)
                     && !mDeviceMqttConfig.lwtTopic.equals(mDeviceMqttConfig.topicPublish)) {
-                MQTTSupport03.getInstance().subscribe(mDeviceMqttConfig.lwtTopic, mAppMqttConfig.qos);
+                MQTTSupport.getInstance().subscribe(mDeviceMqttConfig.lwtTopic, mAppMqttConfig.qos);
             }
         } catch (MqttException e) {
             e.printStackTrace();

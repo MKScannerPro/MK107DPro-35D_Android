@@ -22,8 +22,8 @@ import com.google.gson.reflect.TypeToken;
 import com.moko.mk107dpro.AppConstants;
 import com.moko.mk107dpro.BuildConfig;
 import com.moko.mk107dpro.R;
-import com.moko.mk107dpro.activity.set.DeviceSetting03Activity;
-import com.moko.mk107dpro.activity.set.ModifySettings03Activity;
+import com.moko.mk107dpro.activity.set.DeviceSetting107dProActivity;
+import com.moko.mk107dpro.activity.set.ModifySettings107dProActivity;
 import com.moko.mk107dpro.adapter.Device107dProAdapter;
 import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.ActivityMain10dproBinding;
@@ -34,9 +34,9 @@ import com.moko.mk107dpro.entity.MokoDevice;
 import com.moko.mk107dpro.utils.SPUtiles;
 import com.moko.mk107dpro.utils.ToastUtils;
 import com.moko.mk107dpro.utils.Utils;
-import com.moko.support.remotegw03.MQTTConstants03;
-import com.moko.support.remotegw03.MQTTSupport03;
-import com.moko.support.remotegw03.MokoSupport03;
+import com.moko.support.remotegw03.MQTTConstants;
+import com.moko.support.remotegw03.MQTTSupport;
+import com.moko.support.remotegw03.MokoSupport;
 import com.moko.support.remotegw03.entity.MsgNotify;
 import com.moko.support.remotegw03.event.DeviceDeletedEvent;
 import com.moko.support.remotegw03.event.DeviceModifyNameEvent;
@@ -82,8 +82,8 @@ public class Main107dProActivity extends BaseActivity<ActivityMain10dproBinding>
             // 如果SD卡不存在，就保存到本应用的目录下
             PATH_LOGCAT = getFilesDir().getAbsolutePath() + File.separator + (BuildConfig.IS_LIBRARY ? "MKScannerPro" : "MK107DPro35D");
         }
-        MokoSupport03.getInstance().init(getApplicationContext());
-        MQTTSupport03.getInstance().init(getApplicationContext());
+        MokoSupport.getInstance().init(getApplicationContext());
+        MQTTSupport.getInstance().init(getApplicationContext());
         devices = DBTools107dPro.getInstance(this).selectAllDevice();
         adapter = new Device107dProAdapter();
         adapter.openLoadAnimation();
@@ -106,7 +106,7 @@ public class Main107dProActivity extends BaseActivity<ActivityMain10dproBinding>
             mBind.tvTitle.setText(getString(R.string.mqtt_connecting));
         }
         try {
-            MQTTSupport03.getInstance().connectMqtt(mAppMqttConfigStr);
+            MQTTSupport.getInstance().connectMqtt(mAppMqttConfigStr);
         } catch (FileNotFoundException e) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 ToastUtils.showToast(this, "Please select your SSL certificates again, otherwise the APP can't use normally.");
@@ -201,7 +201,7 @@ public class Main107dProActivity extends BaseActivity<ActivityMain10dproBinding>
             String from = getIntent().getStringExtra(AppConstants.EXTRA_KEY_FROM_ACTIVITY);
             String mac = getIntent().getStringExtra(AppConstants.EXTRA_KEY_MAC);
             if (ModifyName107dProActivity.TAG.equals(from)
-                    || DeviceSetting03Activity.TAG.equals(from)) {
+                    || DeviceSetting107dProActivity.TAG.equals(from)) {
                 devices.clear();
                 devices.addAll(DBTools107dPro.getInstance(this).selectAllDevice());
                 if (!TextUtils.isEmpty(mac)) {
@@ -231,7 +231,7 @@ public class Main107dProActivity extends BaseActivity<ActivityMain10dproBinding>
                     mBind.rlEmpty.setVisibility(View.VISIBLE);
                 }
             }
-            if (ModifySettings03Activity.TAG.equals(from)) {
+            if (ModifySettings107dProActivity.TAG.equals(from)) {
                 if (!TextUtils.isEmpty(mac)) {
                     MokoDevice mokoDevice = DBTools107dPro.getInstance(this).selectDevice(mac);
                     for (final MokoDevice device : devices) {
@@ -240,17 +240,17 @@ public class Main107dProActivity extends BaseActivity<ActivityMain10dproBinding>
                                 try {
                                     if (!device.topicPublish.equals(mokoDevice.topicPublish)) {
                                         // 取消订阅旧主题
-                                        MQTTSupport03.getInstance().unSubscribe(device.topicPublish);
+                                        MQTTSupport.getInstance().unSubscribe(device.topicPublish);
                                         // 订阅新主题
-                                        MQTTSupport03.getInstance().subscribe(mokoDevice.topicPublish, mAppMqttConfig.qos);
+                                        MQTTSupport.getInstance().subscribe(mokoDevice.topicPublish, mAppMqttConfig.qos);
                                     }
                                     if (device.lwtEnable == 1
                                             && !TextUtils.isEmpty(device.lwtTopic)
                                             && !device.lwtTopic.equals(mokoDevice.topicPublish)) {
                                         // 取消订阅旧遗愿主题
-                                        MQTTSupport03.getInstance().unSubscribe(device.lwtTopic);
+                                        MQTTSupport.getInstance().unSubscribe(device.lwtTopic);
                                         // 订阅新遗愿主题
-                                        MQTTSupport03.getInstance().subscribe(mokoDevice.lwtTopic, mAppMqttConfig.qos);
+                                        MQTTSupport.getInstance().subscribe(mokoDevice.lwtTopic, mAppMqttConfig.qos);
 
                                     }
                                 } catch (MqttException e) {
@@ -303,7 +303,7 @@ public class Main107dProActivity extends BaseActivity<ActivityMain10dproBinding>
         MokoDevice mokoDevice = (MokoDevice) adapter.getItem(position);
         if (mokoDevice == null)
             return;
-        if (!MQTTSupport03.getInstance().isConnected()) {
+        if (!MQTTSupport.getInstance().isConnected()) {
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }
@@ -325,7 +325,7 @@ public class Main107dProActivity extends BaseActivity<ActivityMain10dproBinding>
         dialog.setTitle("Remove Device");
         dialog.setMessage("Please confirm again whether to \n remove the device");
         dialog.setOnAlertConfirmListener(() -> {
-            if (!MQTTSupport03.getInstance().isConnected()) {
+            if (!MQTTSupport.getInstance().isConnected()) {
                 ToastUtils.showToast(Main107dProActivity.this, R.string.network_error);
                 return;
             }
@@ -333,11 +333,11 @@ public class Main107dProActivity extends BaseActivity<ActivityMain10dproBinding>
             // 取消订阅
             if (TextUtils.isEmpty(mAppMqttConfig.topicSubscribe)) {
                 try {
-                    MQTTSupport03.getInstance().unSubscribe(mokoDevice.topicPublish);
+                    MQTTSupport.getInstance().unSubscribe(mokoDevice.topicPublish);
                     if (mokoDevice.lwtEnable == 1
                             && !TextUtils.isEmpty(mokoDevice.lwtTopic)
                             && !mokoDevice.lwtTopic.equals(mokoDevice.topicPublish))
-                        MQTTSupport03.getInstance().unSubscribe(mokoDevice.lwtTopic);
+                        MQTTSupport.getInstance().unSubscribe(mokoDevice.lwtTopic);
                 } catch (MqttException e) {
                     e.printStackTrace();
                 }
@@ -359,7 +359,7 @@ public class Main107dProActivity extends BaseActivity<ActivityMain10dproBinding>
     private void subscribeAllDevices() {
         if (!TextUtils.isEmpty(mAppMqttConfig.topicSubscribe)) {
             try {
-                MQTTSupport03.getInstance().subscribe(mAppMqttConfig.topicSubscribe, mAppMqttConfig.qos);
+                MQTTSupport.getInstance().subscribe(mAppMqttConfig.topicSubscribe, mAppMqttConfig.qos);
             } catch (MqttException e) {
                 e.printStackTrace();
             }
@@ -370,12 +370,12 @@ public class Main107dProActivity extends BaseActivity<ActivityMain10dproBinding>
                 try {
                     // 订阅设备发布主题
                     if (TextUtils.isEmpty(mAppMqttConfig.topicSubscribe))
-                        MQTTSupport03.getInstance().subscribe(device.topicPublish, mAppMqttConfig.qos);
+                        MQTTSupport.getInstance().subscribe(device.topicPublish, mAppMqttConfig.qos);
                     // 订阅遗愿主题
                     if (device.lwtEnable == 1
                             && !TextUtils.isEmpty(device.lwtTopic)
                             && !device.lwtTopic.equals(device.topicPublish))
-                        MQTTSupport03.getInstance().subscribe(device.lwtTopic, mAppMqttConfig.qos);
+                        MQTTSupport.getInstance().subscribe(device.lwtTopic, mAppMqttConfig.qos);
                 } catch (MqttException e) {
                     e.printStackTrace();
                 }
@@ -401,7 +401,7 @@ public class Main107dProActivity extends BaseActivity<ActivityMain10dproBinding>
             return;
         }
         // 收到任何信息都认为在线，除了遗愿信息
-        if (msg_id == MQTTConstants03.NOTIFY_MSG_ID_BLE_SCAN_RESULT && isDurationVoid())
+        if (msg_id == MQTTConstants.NOTIFY_MSG_ID_BLE_SCAN_RESULT && isDurationVoid())
             return;
         Type type = new TypeToken<MsgNotify<Object>>() {
         }.getType();
@@ -409,8 +409,8 @@ public class Main107dProActivity extends BaseActivity<ActivityMain10dproBinding>
         final String mac = msgNotify.device_info.mac;
         for (final MokoDevice device : devices) {
             if (device.mac.equals(mac)) {
-                if ((msg_id == MQTTConstants03.NOTIFY_MSG_ID_OFFLINE
-                        || msg_id == MQTTConstants03.NOTIFY_MSG_ID_BUTTON_RESET) && device.isOnline) {
+                if ((msg_id == MQTTConstants.NOTIFY_MSG_ID_OFFLINE
+                        || msg_id == MQTTConstants.NOTIFY_MSG_ID_BUTTON_RESET) && device.isOnline) {
                     // 收到遗愿信息或者按键重置，设备离线
                     device.isOnline = false;
                     if (mHandler.hasMessages(device.id)) {
@@ -421,7 +421,7 @@ public class Main107dProActivity extends BaseActivity<ActivityMain10dproBinding>
                     EventBus.getDefault().post(new DeviceOnlineEvent(mac, false));
                     break;
                 }
-                if (msg_id == MQTTConstants03.NOTIFY_MSG_ID_NETWORKING_STATUS) {
+                if (msg_id == MQTTConstants.NOTIFY_MSG_ID_NETWORKING_STATUS) {
                     Type netType = new TypeToken<MsgNotify<JsonObject>>() {
                     }.getType();
                     MsgNotify<JsonObject> netMsgNotify = new Gson().fromJson(message, netType);
@@ -462,7 +462,7 @@ public class Main107dProActivity extends BaseActivity<ActivityMain10dproBinding>
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        MQTTSupport03.getInstance().disconnectMqtt();
+        MQTTSupport.getInstance().disconnectMqtt();
         if (!devices.isEmpty()) {
             for (final MokoDevice device : devices) {
                 if (mHandler.hasMessages(device.id)) {

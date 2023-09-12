@@ -71,7 +71,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.moko.mk107dpro.activity.set.DeviceSetting03Activity"
+            android:name="com.moko.mk107dpro.activity.set.DeviceSetting107dProActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
@@ -169,7 +169,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.moko.mk107dpro.activity.set.SystemTime03Activity"
+            android:name="com.moko.mk107dpro.activity.set.SystemTime107dProActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
@@ -253,7 +253,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.moko.mk107dpro.activity.set.ModifySettings03Activity"
+            android:name="com.moko.mk107dpro.activity.set.ModifySettings107dProActivity"
             android:configChanges="orientation|keyboard|keyboardHidden|locale|layoutDirection"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />

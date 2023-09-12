@@ -20,7 +20,7 @@ import com.moko.mk107dpro.databinding.ActivityWifiSettings107dproBinding;
 import com.moko.mk107dpro.dialog.Bottom107dProDialog;
 import com.moko.mk107dpro.utils.FileUtils;
 import com.moko.mk107dpro.utils.ToastUtils;
-import com.moko.support.remotegw03.MokoSupport03;
+import com.moko.support.remotegw03.MokoSupport;
 import com.moko.support.remotegw03.OrderTaskAssembler;
 import com.moko.support.remotegw03.entity.OrderCHAR;
 import com.moko.support.remotegw03.entity.ParamsKeyEnum;
@@ -90,7 +90,7 @@ public class WifiSettings107dProActivity extends BaseActivity<ActivityWifiSettin
             orderTasks.add(OrderTaskAssembler.getWifiEapPassword());
             orderTasks.add(OrderTaskAssembler.getWifiEapDomainId());
             orderTasks.add(OrderTaskAssembler.getWifiEapVerifyServiceEnable());
-            MokoSupport03.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
         mBind.tvCountryBrand.setOnClickListener(v -> onSelectCountry());
     }
@@ -421,7 +421,7 @@ public class WifiSettings107dProActivity extends BaseActivity<ActivityWifiSettin
             }
             orderTasks.add(OrderTaskAssembler.setCountryBrand(countrySelected));
             orderTasks.add(OrderTaskAssembler.setWifiEapType(mEAPTypeSelected));
-            MokoSupport03.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         } catch (Exception e) {
             ToastUtils.showToast(this, "File is missing");
         }

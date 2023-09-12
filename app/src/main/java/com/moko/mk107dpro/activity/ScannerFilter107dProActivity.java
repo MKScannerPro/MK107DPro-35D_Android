@@ -14,7 +14,7 @@ import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.ActivityScannerFilter107dproBinding;
 import com.moko.mk107dpro.utils.ToastUtils;
-import com.moko.support.remotegw03.MokoSupport03;
+import com.moko.support.remotegw03.MokoSupport;
 import com.moko.support.remotegw03.OrderTaskAssembler;
 import com.moko.support.remotegw03.entity.OrderCHAR;
 import com.moko.support.remotegw03.entity.ParamsKeyEnum;
@@ -51,7 +51,7 @@ public class ScannerFilter107dProActivity extends BaseActivity<ActivityScannerFi
             orderTasks.add(OrderTaskAssembler.getFilterRSSI());
             orderTasks.add(OrderTaskAssembler.getFilterMacRules());
             orderTasks.add(OrderTaskAssembler.getFilterNameRules());
-            MokoSupport03.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+            MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
         }, 500);
     }
 
@@ -187,7 +187,7 @@ public class ScannerFilter107dProActivity extends BaseActivity<ActivityScannerFi
         orderTasks.add(OrderTaskAssembler.setFilterMacRules(filterMacAddress));
         orderTasks.add(OrderTaskAssembler.setFilterRelationship(7));
         orderTasks.add(OrderTaskAssembler.setFilterRSSI(rssi));
-        MokoSupport03.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
+        MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
     }
 
     private boolean isParaError() {

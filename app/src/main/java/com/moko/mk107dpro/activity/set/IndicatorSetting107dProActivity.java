@@ -17,8 +17,8 @@ import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.entity.MokoDevice;
 import com.moko.mk107dpro.utils.SPUtiles;
 import com.moko.mk107dpro.utils.ToastUtils;
-import com.moko.support.remotegw03.MQTTConstants03;
-import com.moko.support.remotegw03.MQTTSupport03;
+import com.moko.support.remotegw03.MQTTConstants;
+import com.moko.support.remotegw03.MQTTSupport;
 import com.moko.support.remotegw03.entity.MsgConfigResult;
 import com.moko.support.remotegw03.entity.MsgReadResult;
 import com.moko.support.remotegw03.event.DeviceOnlineEvent;
@@ -38,7 +38,6 @@ public class IndicatorSetting107dProActivity extends BaseActivity<ActivityIndica
     private int bleConnectedEnable;
     private int serverConnectingEnable;
     private int serverConnectedEnable;
-
     public Handler mHandler;
 
     @Override
@@ -64,10 +63,8 @@ public class IndicatorSetting107dProActivity extends BaseActivity<ActivityIndica
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMQTTMessageArrivedEvent(MQTTMessageArrivedEvent event) {
         // 更新所有设备的网络状态
-        final String topic = event.getTopic();
         final String message = event.getMessage();
-        if (TextUtils.isEmpty(message))
-            return;
+        if (TextUtils.isEmpty(message)) return;
         int msg_id;
         try {
             JsonObject object = new Gson().fromJson(message, JsonObject.class);
@@ -77,12 +74,11 @@ public class IndicatorSetting107dProActivity extends BaseActivity<ActivityIndica
             e.printStackTrace();
             return;
         }
-        if (msg_id == MQTTConstants03.READ_MSG_ID_INDICATOR_STATUS) {
+        if (msg_id == MQTTConstants.READ_MSG_ID_INDICATOR_STATUS) {
             Type type = new TypeToken<MsgReadResult<JsonObject>>() {
             }.getType();
             MsgReadResult<JsonObject> result = new Gson().fromJson(message, type);
-            if (!mMokoDevice.mac.equalsIgnoreCase(result.device_info.mac))
-                return;
+            if (!mMokoDevice.mac.equalsIgnoreCase(result.device_info.mac)) return;
             dismissLoadingProgressDialog();
             mHandler.removeMessages(0);
             bleBroadcastEnable = result.data.get("ble_adv_led").getAsInt();
@@ -94,12 +90,11 @@ public class IndicatorSetting107dProActivity extends BaseActivity<ActivityIndica
             mBind.cbServerConnecting.setChecked(serverConnectingEnable == 1);
             mBind.cbServerConnected.setChecked(serverConnectedEnable == 1);
         }
-        if (msg_id == MQTTConstants03.CONFIG_MSG_ID_INDICATOR_STATUS) {
+        if (msg_id == MQTTConstants.CONFIG_MSG_ID_INDICATOR_STATUS) {
             Type type = new TypeToken<MsgConfigResult>() {
             }.getType();
             MsgConfigResult result = new Gson().fromJson(message, type);
-            if (!mMokoDevice.mac.equalsIgnoreCase(result.device_info.mac))
-                return;
+            if (!mMokoDevice.mac.equalsIgnoreCase(result.device_info.mac)) return;
             dismissLoadingProgressDialog();
             mHandler.removeMessages(0);
             if (result.result_code == 0) {
@@ -119,9 +114,8 @@ public class IndicatorSetting107dProActivity extends BaseActivity<ActivityIndica
         finish();
     }
 
-
     private void setIndicatorStatus() {
-        int msgId = MQTTConstants03.CONFIG_MSG_ID_INDICATOR_STATUS;
+        int msgId = MQTTConstants.CONFIG_MSG_ID_INDICATOR_STATUS;
         bleBroadcastEnable = mBind.cbBleBroadcast.isChecked() ? 1 : 0;
         bleConnectedEnable = mBind.cbBleConnected.isChecked() ? 1 : 0;
         serverConnectingEnable = mBind.cbServerConnecting.isChecked() ? 1 : 0;
@@ -133,17 +127,17 @@ public class IndicatorSetting107dProActivity extends BaseActivity<ActivityIndica
         jsonObject.addProperty("server_connected_led", serverConnectedEnable);
         String message = assembleWriteCommonData(msgId, mMokoDevice.mac, jsonObject);
         try {
-            MQTTSupport03.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
+            MQTTSupport.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
         } catch (MqttException e) {
             e.printStackTrace();
         }
     }
 
     private void getIndicatorStatus() {
-        int msgId = MQTTConstants03.READ_MSG_ID_INDICATOR_STATUS;
+        int msgId = MQTTConstants.READ_MSG_ID_INDICATOR_STATUS;
         String message = assembleReadCommon(msgId, mMokoDevice.mac);
         try {
-            MQTTSupport03.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
+            MQTTSupport.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -151,7 +145,7 @@ public class IndicatorSetting107dProActivity extends BaseActivity<ActivityIndica
 
     public void onSave(View view) {
         if (isWindowLocked()) return;
-        if (!MQTTSupport03.getInstance().isConnected()) {
+        if (!MQTTSupport.getInstance().isConnected()) {
             ToastUtils.showToast(this, R.string.network_error);
             return;
         }

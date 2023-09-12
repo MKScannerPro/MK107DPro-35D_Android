@@ -23,9 +23,9 @@ import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.entity.MokoDevice;
 import com.moko.mk107dpro.utils.SPUtiles;
 import com.moko.mk107dpro.utils.ToastUtils;
-import com.moko.support.remotegw03.MQTTConstants03;
-import com.moko.support.remotegw03.MQTTSupport03;
-import com.moko.support.remotegw03.MokoSupport03;
+import com.moko.support.remotegw03.MQTTConstants;
+import com.moko.support.remotegw03.MQTTSupport;
+import com.moko.support.remotegw03.MokoSupport;
 import com.moko.support.remotegw03.OrderTaskAssembler;
 import com.moko.support.remotegw03.entity.MsgConfigResult;
 import com.moko.support.remotegw03.entity.MsgReadResult;
@@ -90,7 +90,7 @@ public class AdvertiseIBeacon107dProActivity extends BaseActivity<ActivityAdvert
                 orderTasks.add(OrderTaskAssembler.getIBeaconUUid());
                 orderTasks.add(OrderTaskAssembler.getIBeaconAdInterval());
                 orderTasks.add(OrderTaskAssembler.getIBeaconTxPower());
-                MokoSupport03.getInstance().sendOrder(orderTasks.toArray(new OrderTask[0]));
+                MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[0]));
             }, 500);
         }
         mBind.tvTxPowerVal.setOnClickListener(v -> {
@@ -112,10 +112,10 @@ public class AdvertiseIBeacon107dProActivity extends BaseActivity<ActivityAdvert
             dismissLoadingProgressDialog();
             finish();
         }, 30 * 1000);
-        int msgId = MQTTConstants03.READ_MSG_ID_BEACON_PARAMS;
+        int msgId = MQTTConstants.READ_MSG_ID_BEACON_PARAMS;
         String message = assembleReadCommon(msgId, mMokoDevice.mac);
         try {
-            MQTTSupport03.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
+            MQTTSupport.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -136,7 +136,7 @@ public class AdvertiseIBeacon107dProActivity extends BaseActivity<ActivityAdvert
             e.printStackTrace();
             return;
         }
-        if (msg_id == MQTTConstants03.READ_MSG_ID_BEACON_PARAMS) {
+        if (msg_id == MQTTConstants.READ_MSG_ID_BEACON_PARAMS) {
             Type type = new TypeToken<MsgReadResult<JsonObject>>() {
             }.getType();
             MsgReadResult<JsonObject> result = new Gson().fromJson(message, type);
@@ -161,7 +161,7 @@ public class AdvertiseIBeacon107dProActivity extends BaseActivity<ActivityAdvert
             mSelected = result.data.get("tx_power").getAsInt();
             mBind.tvTxPowerVal.setText(txPowerArr[mSelected]);
         }
-        if (msg_id == MQTTConstants03.CONFIG_MSG_ID_BEACON_PARAMS) {
+        if (msg_id == MQTTConstants.CONFIG_MSG_ID_BEACON_PARAMS) {
             Type type = new TypeToken<MsgConfigResult>() {
             }.getType();
             MsgConfigResult result = new Gson().fromJson(message, type);
@@ -310,7 +310,7 @@ public class AdvertiseIBeacon107dProActivity extends BaseActivity<ActivityAdvert
         if (null == mMokoDevice) {
             if (!mBind.cbIBeacon.isChecked()) {
                 showLoadingProgressDialog();
-                MokoSupport03.getInstance().sendOrder(OrderTaskAssembler.setIBeaconEnable(0));
+                MokoSupport.getInstance().sendOrder(OrderTaskAssembler.setIBeaconEnable(0));
             } else {
                 if (isValid()) {
                     showLoadingProgressDialog();
@@ -325,7 +325,7 @@ public class AdvertiseIBeacon107dProActivity extends BaseActivity<ActivityAdvert
                     orderTasks.add(OrderTaskAssembler.setIBeaconUuid(uuid));
                     orderTasks.add(OrderTaskAssembler.setIBeaconAdInterval(interval));
                     orderTasks.add(OrderTaskAssembler.setIBeaconTxPower(mSelected));
-                    MokoSupport03.getInstance().sendOrder(orderTasks.toArray(new OrderTask[0]));
+                    MokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[0]));
                 } else {
                     ToastUtils.showToast(this, "Para Error");
                 }
@@ -360,7 +360,7 @@ public class AdvertiseIBeacon107dProActivity extends BaseActivity<ActivityAdvert
             dismissLoadingProgressDialog();
             ToastUtils.showToast(this, "Setup failed!");
         }, 30 * 1000);
-        int msgId = MQTTConstants03.CONFIG_MSG_ID_BEACON_PARAMS;
+        int msgId = MQTTConstants.CONFIG_MSG_ID_BEACON_PARAMS;
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("switch_value", mBind.cbIBeacon.isChecked() ? 1 : 0);
         jsonObject.addProperty("major", major);
@@ -370,7 +370,7 @@ public class AdvertiseIBeacon107dProActivity extends BaseActivity<ActivityAdvert
         jsonObject.addProperty("tx_power", mSelected);
         String message = assembleWriteCommonData(msgId, mMokoDevice.mac, jsonObject);
         try {
-            MQTTSupport03.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
+            MQTTSupport.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
         } catch (MqttException e) {
             e.printStackTrace();
         }
