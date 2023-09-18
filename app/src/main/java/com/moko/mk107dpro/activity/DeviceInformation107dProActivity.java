@@ -10,10 +10,10 @@ import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.ActivityDeviceInfo107dproBinding;
-import com.moko.support.remotegw03.MokoSupport;
-import com.moko.support.remotegw03.OrderTaskAssembler;
-import com.moko.support.remotegw03.entity.OrderCHAR;
-import com.moko.support.remotegw03.entity.ParamsKeyEnum;
+import com.moko.support.mk107dpro35d.MokoSupport;
+import com.moko.support.mk107dpro35d.OrderTaskAssembler;
+import com.moko.support.mk107dpro35d.entity.OrderCHAR;
+import com.moko.support.mk107dpro35d.entity.ParamsKeyEnum;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;

@@ -16,7 +16,7 @@ import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.ActivityGuideBinding;
 import com.moko.mk107dpro.dialog.PermissionDialog;
 import com.moko.mk107dpro.utils.Utils;
-import com.moko.support.remotegw03.event.MQTTConnectionCompleteEvent;
+import com.moko.support.mk107dpro35d.event.MQTTConnectionCompleteEvent;
 import com.permissionx.guolindev.PermissionX;
 
 import org.greenrobot.eventbus.Subscribe;

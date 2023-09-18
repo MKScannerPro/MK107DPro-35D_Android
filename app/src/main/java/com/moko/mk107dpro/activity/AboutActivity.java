@@ -10,7 +10,7 @@ import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.ActivityAboutBinding;
 import com.moko.mk107dpro.utils.ToastUtils;
 import com.moko.mk107dpro.utils.Utils;
-import com.moko.support.remotegw03.event.MQTTConnectionCompleteEvent;
+import com.moko.support.mk107dpro35d.event.MQTTConnectionCompleteEvent;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;

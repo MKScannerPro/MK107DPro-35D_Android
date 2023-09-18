@@ -3,7 +3,7 @@ package com.moko.mk107dpro.adapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.moko.mk107dpro.R;
-import com.moko.support.remotegw03.entity.DeviceInfo;
+import com.moko.support.mk107dpro35d.entity.DeviceInfo;
 
 public class DeviceInfo107dProAdapter extends BaseQuickAdapter<DeviceInfo, BaseViewHolder> {
     public DeviceInfo107dProAdapter() {
