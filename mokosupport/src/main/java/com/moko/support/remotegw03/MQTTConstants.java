@@ -59,6 +59,9 @@ public class MQTTConstants {
     public static final int CONFIG_MSG_ID_LOAD_CHANGE_ENABLE = 1085;
     public static final int CONFIG_MSG_ID_RESET_ENERGY_DATA = 1087;
 
+    public static final int CONFIG_MSG_ID_BLE_BXP_BUTTON_LED = 1109;
+    public static final int CONFIG_MSG_ID_BLE_BXP_BUTTON_BUZZER = 1111;
+
 
     // READ
     public static final int READ_MSG_ID_BUTTON_RESET = 2001;
@@ -131,4 +134,7 @@ public class MQTTConstants {
     public static final int NOTIFY_MSG_ID_POWER_DATA = 3082;
     public static final int NOTIFY_MSG_ID_ENERGY_DATA = 3084;
     public static final int NOTIFY_MSG_ID_LOAD_CHANGE_ENABLE = 3086;
+
+    public static final int NOTIFY_MSG_ID_BLE_BXP_BUTTON_LED = 3110;
+    public static final int NOTIFY_MSG_ID_BLE_BXP_BUTTON_BUZZER = 3112;
 }

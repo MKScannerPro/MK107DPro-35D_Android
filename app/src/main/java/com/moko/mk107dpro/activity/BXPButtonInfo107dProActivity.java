@@ -19,6 +19,7 @@ import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.ActivityBxpButtonInfo107dproBinding;
 import com.moko.mk107dpro.db.DBTools107dPro;
 import com.moko.mk107dpro.dialog.AlertMessageDialog;
+import com.moko.mk107dpro.dialog.LedBuzzerControlDialog;
 import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.entity.MokoDevice;
 import com.moko.mk107dpro.utils.SPUtiles;
@@ -38,11 +39,9 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.lang.reflect.Type;
 
 public class BXPButtonInfo107dProActivity extends BaseActivity<ActivityBxpButtonInfo107dproBinding> {
-
     private MokoDevice mMokoDevice;
     private MQTTConfig appMqttConfig;
     private String mAppTopic;
-
     private BXPButtonInfo mBXPButtonInfo;
     private Handler mHandler;
 
@@ -83,11 +82,36 @@ public class BXPButtonInfo107dProActivity extends BaseActivity<ActivityBxpButton
             alarmStatusStr = String.format("Mode %s triggered", mode);
         }
         mBind.tvAlarmStatus.setText(alarmStatusStr);
+        mBind.tvLedControl.setOnClickListener(v -> showControl(0));
+        mBind.tvBuzzerControl.setOnClickListener(v -> showControl(1));
     }
 
     @Override
     protected ActivityBxpButtonInfo107dproBinding getViewBinding() {
         return ActivityBxpButtonInfo107dproBinding.inflate(getLayoutInflater());
+    }
+
+    private void showControl(int index) {
+        LedBuzzerControlDialog dialog = new LedBuzzerControlDialog(index);
+        dialog.setOnConfirmClickListener((duration, interval, from) -> {
+            mHandler.postDelayed(() -> {
+                dismissLoadingProgressDialog();
+                ToastUtils.showToast(this, "Set up failed");
+            }, 30 * 1000);
+            showLoadingProgressDialog();
+            int msgId = from == 0 ? MQTTConstants.CONFIG_MSG_ID_BLE_BXP_BUTTON_LED : MQTTConstants.CONFIG_MSG_ID_BLE_BXP_BUTTON_BUZZER;
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("mac", mBXPButtonInfo.mac);
+            jsonObject.addProperty(from == 0 ? "flash_time" : "ring_time", duration);
+            jsonObject.addProperty(from == 0 ? "flash_interval" : "ring_interval", interval);
+            String message = assembleWriteCommonData(msgId, mMokoDevice.mac, jsonObject);
+            try {
+                MQTTSupport.getInstance().publish(mAppTopic, message, msgId, appMqttConfig.qos);
+            } catch (MqttException e) {
+                e.printStackTrace();
+            }
+        });
+        dialog.showNow(getSupportFragmentManager(), "control");
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -174,6 +198,15 @@ public class BXPButtonInfo107dProActivity extends BaseActivity<ActivityBxpButton
                 return;
             ToastUtils.showToast(this, "Bluetooth disconnect");
             finish();
+        }
+        if (msg_id == MQTTConstants.NOTIFY_MSG_ID_BLE_BXP_BUTTON_LED || msg_id == MQTTConstants.NOTIFY_MSG_ID_BLE_BXP_BUTTON_BUZZER) {
+            dismissLoadingProgressDialog();
+            mHandler.removeMessages(0);
+            Type type = new TypeToken<MsgNotify<BXPButtonInfo>>() {
+            }.getType();
+            MsgNotify<BXPButtonInfo> result = new Gson().fromJson(message, type);
+            if (!mMokoDevice.mac.equalsIgnoreCase(result.device_info.mac)) return;
+            ToastUtils.showToast(this, result.data.result_code == 0 ? "Setup succeed!" : "Setup failed");
         }
     }
 

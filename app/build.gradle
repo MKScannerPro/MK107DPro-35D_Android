@@ -17,7 +17,7 @@ android {
         versionCode 1
         versionName "1.0.0"
         def formatDate = new Date().format("yyyyMMddHHmm")
-        setProperty("archivesBaseName", "MK107D_PRO35D_${versionName}_${formatDate}")
+        setProperty("archivesBaseName", "MK107DPRO_35D_${versionName}_${formatDate}")
     }
 
     buildTypes {
@@ -68,7 +68,7 @@ android {
                 // 修改aar名称
                 variant.outputs.all { output ->
                     def formatDate = new Date().format("yyyyMMddHHmm")
-                    outputFileName = "MK107D_PRO35D_${android.defaultConfig.versionName}_${formatDate}.aar"
+                    outputFileName = "MK107DPRO_35D_${android.defaultConfig.versionName}_${formatDate}.aar"
                 }
                 // 复制aar到指定目录
                 variant.assemble.doLast {

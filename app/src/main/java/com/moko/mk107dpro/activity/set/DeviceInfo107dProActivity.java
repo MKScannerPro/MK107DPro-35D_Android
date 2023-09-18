@@ -11,7 +11,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.moko.mk107dpro.AppConstants;
 import com.moko.mk107dpro.base.BaseActivity;
-import com.moko.mk107dpro.databinding.ActivityDeviceInfo107dproBinding;
+import com.moko.mk107dpro.databinding.ActivityDeviceInfoMqttBinding;
 import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.entity.MokoDevice;
 import com.moko.mk107dpro.utils.SPUtiles;
@@ -27,7 +27,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Type;
 
-public class DeviceInfo107dProActivity extends BaseActivity<ActivityDeviceInfo107dproBinding> {
+public class DeviceInfo107dProActivity extends BaseActivity<ActivityDeviceInfoMqttBinding> {
     private MokoDevice mMokoDevice;
     private MQTTConfig appMqttConfig;
     private String mAppTopic;
@@ -49,8 +49,8 @@ public class DeviceInfo107dProActivity extends BaseActivity<ActivityDeviceInfo10
     }
 
     @Override
-    protected ActivityDeviceInfo107dproBinding getViewBinding() {
-        return ActivityDeviceInfo107dproBinding.inflate(getLayoutInflater());
+    protected ActivityDeviceInfoMqttBinding getViewBinding() {
+        return ActivityDeviceInfoMqttBinding.inflate(getLayoutInflater());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -83,6 +83,7 @@ public class DeviceInfo107dProActivity extends BaseActivity<ActivityDeviceInfo10
             mBind.tvDeviceFirmwareVersion.setText(result.data.get("firmware_version").getAsString());
             mBind.tvDeviceStaMac.setText(result.device_info.mac.toUpperCase());
             mBind.tvDeviceBtMac.setText(result.data.get("ble_mac").getAsString().toUpperCase());
+            mBind.tvBtFirmwareVersion.setText(result.data.get("sl_ble_version").getAsString());
         }
     }
 
