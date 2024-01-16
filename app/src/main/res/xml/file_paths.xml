@@ -1,4 +1,4 @@
 <paths>
-    <external-path name="log" path="MKRemoteGW/"/>
+    <external-path name="log" path="MK107DPro35D/"/>
     <external-path name="*" path="."/>
 </paths>
