@@ -61,6 +61,7 @@ public class SetAppMQTT107dProActivity extends BaseActivity<ActivityMqttApp107dp
     private MQTTConfig mqttConfig;
     private String expertFilePath;
     private boolean isFileError;
+    private boolean mIsSetAppSettings;
 
     @Override
     protected void onCreate() {
@@ -125,6 +126,7 @@ public class SetAppMQTT107dProActivity extends BaseActivity<ActivityMqttApp107dp
 
     @Subscribe(threadMode = ThreadMode.POSTING, priority = 10)
     public void onMQTTConnectionCompleteEvent(MQTTConnectionCompleteEvent event) {
+        if (!mIsSetAppSettings) return;
         EventBus.getDefault().cancelEventDelivery(event);
         String mqttConfigStr = new Gson().toJson(mqttConfig, MQTTConfig.class);
         runOnUiThread(() -> {
@@ -139,6 +141,7 @@ public class SetAppMQTT107dProActivity extends BaseActivity<ActivityMqttApp107dp
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMQTTConnectionFailureEvent(MQTTConnectionFailureEvent event) {
+        if (!mIsSetAppSettings) return;
         ToastUtils.showToast(SetAppMQTT107dProActivity.this, getString(R.string.mqtt_connect_failed));
         dismissLoadingProgressDialog();
         finish();
@@ -201,6 +204,7 @@ public class SetAppMQTT107dProActivity extends BaseActivity<ActivityMqttApp107dp
         MQTTSupport.getInstance().disconnectMqtt();
         showLoadingProgressDialog();
         mBind.etMqttHost.postDelayed(() -> {
+            mIsSetAppSettings = true;
             try {
                 MQTTSupport.getInstance().connectMqtt(mqttConfigStr);
             } catch (FileNotFoundException e) {

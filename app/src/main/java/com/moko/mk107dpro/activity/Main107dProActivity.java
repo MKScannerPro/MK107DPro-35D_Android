@@ -12,6 +12,7 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import okhttp3.RequestBody;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.elvishew.xlog.XLog;
@@ -19,6 +20,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.Response;
+import com.lzy.okgo.request.base.Request;
 import com.moko.mk107dpro.AppConstants;
 import com.moko.mk107dpro.BuildConfig;
 import com.moko.mk107dpro.R;
@@ -29,8 +34,12 @@ import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.ActivityMain10dproBinding;
 import com.moko.mk107dpro.db.DBTools107dPro;
 import com.moko.mk107dpro.dialog.AlertMessageDialog;
+import com.moko.mk107dpro.dialog.LoginDialog;
 import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.entity.MokoDevice;
+import com.moko.mk107dpro.net.Urls;
+import com.moko.mk107dpro.net.entity.CommonResp;
+import com.moko.mk107dpro.net.entity.LoginEntity;
 import com.moko.mk107dpro.utils.SPUtiles;
 import com.moko.mk107dpro.utils.ToastUtils;
 import com.moko.mk107dpro.utils.Utils;
@@ -68,7 +77,7 @@ public class Main107dProActivity extends BaseActivity<ActivityMain10dproBinding>
     public String mAppMqttConfigStr;
     private MQTTConfig mAppMqttConfig;
     public static String PATH_LOGCAT;
-
+    public static String mAccessToken;
     @Override
     protected void onCreate() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -311,6 +320,78 @@ public class Main107dProActivity extends BaseActivity<ActivityMain10dproBinding>
             ToastUtils.showToast(this, String.format("SSID:%s, the network cannot available,please check", ssid));
             XLog.i(String.format("SSID:%s, the network cannot available,please check", ssid));
         }
+    }
+
+    public void mainSyncDevices(View view) {
+        if (isWindowLocked()) return;
+        if (devices.isEmpty()) {
+            ToastUtils.showToast(this, "Add devices first");
+            return;
+        }
+        // 登录
+        String account = SPUtiles.getStringValue(this, AppConstants.EXTRA_KEY_LOGIN_ACCOUNT, "");
+        String password = SPUtiles.getStringValue(this, AppConstants.EXTRA_KEY_LOGIN_PASSWORD, "");
+        int env = SPUtiles.getIntValue(this, AppConstants.EXTRA_KEY_LOGIN_ENV, 0);
+        if (TextUtils.isEmpty(account) || TextUtils.isEmpty(password)) {
+            LoginDialog dialog = new LoginDialog();
+            dialog.setOnLoginClicked(this::login);
+            dialog.show(getSupportFragmentManager());
+            return;
+        }
+        login(account, password, env);
+    }
+
+    private void login(String account, String password, int envValue) {
+        LoginEntity entity = new LoginEntity();
+        entity.username = account;
+        entity.password = password;
+        entity.source = 1;
+        if (envValue == 0)
+            Urls.setCloudEnv(getApplicationContext());
+        else
+            Urls.setTestEnv(getApplicationContext());
+        RequestBody body = RequestBody.create(Urls.JSON, new Gson().toJson(entity));
+        OkGo.<String>post(Urls.loginApi(getApplicationContext()))
+                .upRequestBody(body)
+                .execute(new StringCallback() {
+
+                    @Override
+                    public void onStart(Request<String, ? extends Request> request) {
+                        showLoadingProgressDialog();
+                    }
+
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Type type = new TypeToken<CommonResp<JsonObject>>() {
+                        }.getType();
+                        CommonResp<JsonObject> commonResp = new Gson().fromJson(response.body(), type);
+                        if (commonResp.code != 200) {
+                            ToastUtils.showToast(Main107dProActivity.this, commonResp.msg);
+                            LoginDialog dialog = new LoginDialog();
+                            dialog.setOnLoginClicked((account1, password1, env) -> login(account1, password1, env));
+                            dialog.show(getSupportFragmentManager());
+                            return;
+                        }
+                        SPUtiles.setStringValue(Main107dProActivity.this, AppConstants.EXTRA_KEY_LOGIN_ACCOUNT, account);
+                        SPUtiles.setStringValue(Main107dProActivity.this, AppConstants.EXTRA_KEY_LOGIN_PASSWORD, password);
+                        SPUtiles.setIntValue(Main107dProActivity.this, AppConstants.EXTRA_KEY_LOGIN_ENV, envValue);
+                        mAccessToken = commonResp.data.get("access_token").getAsString();
+                        startActivity(new Intent(Main107dProActivity.this, SyncDeviceActivity.class));
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        ToastUtils.showToast(Main107dProActivity.this, R.string.request_error);
+                        LoginDialog dialog = new LoginDialog();
+                        dialog.setOnLoginClicked((account12, password12, env) -> login(account12, password12, env));
+                        dialog.show(getSupportFragmentManager());
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        dismissLoadingProgressDialog();
+                    }
+                });
     }
 
     @Override
