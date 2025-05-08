@@ -25,20 +25,20 @@ import com.moko.mk107dpro.activity.Main107dProActivity;
 import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.ActivityDeviceSetting107dproBinding;
 import com.moko.mk107dpro.db.DBTools107dPro;
-import com.moko.mk107dpro.dialog.AlertMessageDialog;
-import com.moko.mk107dpro.dialog.CustomDialog;
+import com.moko.lib.scannerui.dialog.AlertMessageDialog;
+import com.moko.lib.scannerui.dialog.CustomDialog;
 import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.entity.MokoDevice;
 import com.moko.mk107dpro.utils.SPUtiles;
-import com.moko.mk107dpro.utils.ToastUtils;
+import com.moko.lib.scannerui.utils.ToastUtils;
 import com.moko.support.mk107dpro35d.MQTTConstants;
-import com.moko.support.mk107dpro35d.MQTTSupport;
-import com.moko.support.mk107dpro35d.entity.MsgConfigResult;
-import com.moko.support.mk107dpro35d.entity.MsgReadResult;
-import com.moko.support.mk107dpro35d.event.DeviceDeletedEvent;
-import com.moko.support.mk107dpro35d.event.DeviceModifyNameEvent;
-import com.moko.support.mk107dpro35d.event.DeviceOnlineEvent;
-import com.moko.support.mk107dpro35d.event.MQTTMessageArrivedEvent;
+import com.moko.lib.mqtt.MQTTSupport;
+import com.moko.lib.mqtt.entity.MsgConfigResult;
+import com.moko.lib.mqtt.entity.MsgReadResult;
+import com.moko.lib.mqtt.event.DeviceDeletedEvent;
+import com.moko.lib.mqtt.event.DeviceModifyNameEvent;
+import com.moko.lib.mqtt.event.DeviceOnlineEvent;
+import com.moko.lib.mqtt.event.MQTTMessageArrivedEvent;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.greenrobot.eventbus.EventBus;
@@ -108,12 +108,12 @@ public class DeviceSetting107dProActivity extends BaseActivity<ActivityDeviceSet
             if (msg_id == MQTTConstants.READ_MSG_ID_OUTPUT_SWITCH) {
                 isOutputSwitch = enable == 1;
                 getSwitchState(MQTTConstants.READ_MSG_ID_OUTPUT_CONTROL);
-                mBind.imgOutputSwitch.setImageResource(enable == 1 ? R.drawable.checkbox_open : R.drawable.checkbox_close);
+                mBind.imgOutputSwitch.setImageResource(enable == 1 ? R.drawable.ic_checkbox_open : R.drawable.ic_checkbox_close);
             } else {
                 dismissLoadingProgressDialog();
                 mHandler.removeMessages(0);
                 isOutputControl = enable == 1;
-                mBind.imgOutputControl.setImageResource(enable == 1 ? R.drawable.checkbox_open : R.drawable.checkbox_close);
+                mBind.imgOutputControl.setImageResource(enable == 1 ? R.drawable.ic_checkbox_open : R.drawable.ic_checkbox_close);
             }
         }
         if (msg_id == MQTTConstants.CONFIG_MSG_ID_OUTPUT_SWITCH || msg_id == MQTTConstants.CONFIG_MSG_ID_OUTPUT_CONTROL) {
@@ -126,10 +126,10 @@ public class DeviceSetting107dProActivity extends BaseActivity<ActivityDeviceSet
             if (result.result_code == 0) {
                 if (msg_id == MQTTConstants.CONFIG_MSG_ID_OUTPUT_SWITCH) {
                     isOutputSwitch = !isOutputSwitch;
-                    mBind.imgOutputSwitch.setImageResource(isOutputSwitch ? R.drawable.checkbox_open : R.drawable.checkbox_close);
+                    mBind.imgOutputSwitch.setImageResource(isOutputSwitch ? R.drawable.ic_checkbox_open : R.drawable.ic_checkbox_close);
                 } else {
                     isOutputControl = !isOutputControl;
-                    mBind.imgOutputControl.setImageResource(isOutputControl ? R.drawable.checkbox_open : R.drawable.checkbox_close);
+                    mBind.imgOutputControl.setImageResource(isOutputControl ? R.drawable.ic_checkbox_open : R.drawable.ic_checkbox_close);
                 }
                 ToastUtils.showToast(this, "Set up succeed");
             } else {

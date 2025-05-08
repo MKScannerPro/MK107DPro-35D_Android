@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.moko.mk107dpro.databinding.FragmentGeneralApp107dproBinding;
-import com.moko.mk107dpro.utils.ToastUtils;
+import com.moko.lib.scannerui.utils.ToastUtils;
 
 public class General107dProFragment extends Fragment {
 

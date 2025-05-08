@@ -10,8 +10,8 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.ActivityNtpSettings107dproBinding;
-import com.moko.mk107dpro.dialog.Bottom107dProDialog;
-import com.moko.mk107dpro.utils.ToastUtils;
+import com.moko.lib.scannerui.dialog.BottomDialog;
+import com.moko.lib.scannerui.utils.ToastUtils;
 import com.moko.support.mk107dpro35d.MokoSupport;
 import com.moko.support.mk107dpro35d.OrderTaskAssembler;
 import com.moko.support.mk107dpro35d.entity.OrderCHAR;
@@ -152,7 +152,7 @@ public class NtpSettings107dProActivity extends BaseActivity<ActivityNtpSettings
 
     public void onSelectTimeZone(View view) {
         if (isWindowLocked()) return;
-        Bottom107dProDialog dialog = new Bottom107dProDialog();
+        BottomDialog dialog = new BottomDialog();
         dialog.setDatas(mTimeZones, mSelected);
         dialog.setListener(value -> {
             mSelected = value;

@@ -17,9 +17,9 @@ import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.mk107dpro.AppConstants;
 import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.ActivityWifiSettings107dproBinding;
-import com.moko.mk107dpro.dialog.Bottom107dProDialog;
+import com.moko.lib.scannerui.dialog.BottomDialog;
 import com.moko.mk107dpro.utils.FileUtils;
-import com.moko.mk107dpro.utils.ToastUtils;
+import com.moko.lib.scannerui.utils.ToastUtils;
 import com.moko.support.mk107dpro35d.MokoSupport;
 import com.moko.support.mk107dpro35d.OrderTaskAssembler;
 import com.moko.support.mk107dpro35d.entity.OrderCHAR;
@@ -263,7 +263,7 @@ public class WifiSettings107dProActivity extends BaseActivity<ActivityWifiSettin
 
     public void onSelectSecurity(View view) {
         if (isWindowLocked()) return;
-        Bottom107dProDialog dialog = new Bottom107dProDialog();
+        BottomDialog dialog = new BottomDialog();
         dialog.setDatas(mSecurityValues, mSecuritySelected);
         dialog.setListener(value -> {
             mSecuritySelected = value;
@@ -296,7 +296,7 @@ public class WifiSettings107dProActivity extends BaseActivity<ActivityWifiSettin
 
     private void onSelectCountry() {
         if (isWindowLocked()) return;
-        Bottom107dProDialog dialog = new Bottom107dProDialog();
+        BottomDialog dialog = new BottomDialog();
         dialog.setDatas(new ArrayList<>(Arrays.asList(countryBrand)), countrySelected);
         dialog.setListener(value -> {
             countrySelected = value;
@@ -307,7 +307,7 @@ public class WifiSettings107dProActivity extends BaseActivity<ActivityWifiSettin
 
     public void onSelectEAPType(View view) {
         if (isWindowLocked()) return;
-        Bottom107dProDialog dialog = new Bottom107dProDialog();
+        BottomDialog dialog = new BottomDialog();
         dialog.setDatas(mEAPTypeValues, mEAPTypeSelected);
         dialog.setListener(value -> {
             mEAPTypeSelected = value;

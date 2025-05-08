@@ -14,17 +14,17 @@ import com.moko.mk107dpro.AppConstants;
 import com.moko.mk107dpro.R;
 import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.ActivitySystemTime107drpoBinding;
-import com.moko.mk107dpro.dialog.Bottom107dProDialog;
+import com.moko.lib.scannerui.dialog.BottomDialog;
 import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.entity.MokoDevice;
 import com.moko.mk107dpro.utils.SPUtiles;
-import com.moko.mk107dpro.utils.ToastUtils;
+import com.moko.lib.scannerui.utils.ToastUtils;
 import com.moko.support.mk107dpro35d.MQTTConstants;
-import com.moko.support.mk107dpro35d.MQTTSupport;
-import com.moko.support.mk107dpro35d.entity.MsgConfigResult;
-import com.moko.support.mk107dpro35d.entity.MsgReadResult;
-import com.moko.support.mk107dpro35d.event.DeviceOnlineEvent;
-import com.moko.support.mk107dpro35d.event.MQTTMessageArrivedEvent;
+import com.moko.lib.mqtt.MQTTSupport;
+import com.moko.lib.mqtt.entity.MsgConfigResult;
+import com.moko.lib.mqtt.entity.MsgReadResult;
+import com.moko.lib.mqtt.event.DeviceOnlineEvent;
+import com.moko.lib.mqtt.event.MQTTMessageArrivedEvent;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.greenrobot.eventbus.Subscribe;
@@ -213,7 +213,7 @@ public class SystemTime107dProActivity extends BaseActivity<ActivitySystemTime10
     public void onSelectTimeZone(View view) {
         if (isWindowLocked())
             return;
-        Bottom107dProDialog dialog = new Bottom107dProDialog();
+        BottomDialog dialog = new BottomDialog();
         dialog.setDatas(mTimeZones, mSelectedTimeZone);
         dialog.setListener(value -> {
             if (!MQTTSupport.getInstance().isConnected()) {

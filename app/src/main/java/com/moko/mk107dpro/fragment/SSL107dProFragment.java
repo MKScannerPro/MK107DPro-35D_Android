@@ -17,9 +17,9 @@ import androidx.fragment.app.Fragment;
 import com.moko.mk107dpro.R;
 import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.FragmentSslApp107dproBinding;
-import com.moko.mk107dpro.dialog.Bottom107dProDialog;
+import com.moko.lib.scannerui.dialog.BottomDialog;
 import com.moko.mk107dpro.utils.FileUtils;
-import com.moko.mk107dpro.utils.ToastUtils;
+import com.moko.lib.scannerui.utils.ToastUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -161,7 +161,7 @@ public class SSL107dProFragment extends Fragment {
     }
 
     public void selectCertificate() {
-        Bottom107dProDialog dialog = new Bottom107dProDialog();
+        BottomDialog dialog = new BottomDialog();
         dialog.setDatas(values, selected);
         dialog.setListener(value -> {
             selected = value;
