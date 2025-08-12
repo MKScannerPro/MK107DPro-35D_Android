@@ -8,29 +8,25 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.RadioGroup;
 
-import androidx.annotation.IdRes;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
-
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
+import com.moko.lib.scannerui.dialog.AlertMessageDialog;
+import com.moko.lib.scannerui.utils.ToastUtils;
 import com.moko.mk107dpro.AppConstants;
 import com.moko.mk107dpro.R;
 import com.moko.mk107dpro.adapter.MQTTFragmentAdapter;
 import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.ActivityMqttDevice107dproBinding;
-import com.moko.lib.scannerui.dialog.AlertMessageDialog;
 import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.fragment.GeneralDevice107dProFragment;
 import com.moko.mk107dpro.fragment.LWT107dProFragment;
 import com.moko.mk107dpro.fragment.SSLDevice107dProFragment;
 import com.moko.mk107dpro.fragment.UserDevice107dProFragment;
 import com.moko.mk107dpro.utils.FileUtils;
-import com.moko.lib.scannerui.utils.ToastUtils;
 import com.moko.mk107dpro.utils.Utils;
 import com.moko.support.mk107dpro35d.MokoSupport;
 import com.moko.support.mk107dpro35d.OrderTaskAssembler;
@@ -52,6 +48,10 @@ import java.io.File;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import androidx.annotation.IdRes;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 public class MqttSettings107dProActivity extends BaseActivity<ActivityMqttDevice107dproBinding> implements RadioGroup.OnCheckedChangeListener {
     private final String FILTER_ASCII = "[ -~]*";

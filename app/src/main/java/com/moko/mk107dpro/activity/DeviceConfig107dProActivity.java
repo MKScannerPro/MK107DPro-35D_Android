@@ -7,9 +7,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-
 import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -19,24 +16,24 @@ import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTaskResponse;
+import com.moko.lib.mqtt.MQTTSupport;
+import com.moko.lib.mqtt.entity.MsgNotify;
+import com.moko.lib.mqtt.event.MQTTMessageArrivedEvent;
+import com.moko.lib.scannerui.dialog.CustomDialog;
+import com.moko.lib.scannerui.utils.ToastUtils;
 import com.moko.mk107dpro.AppConstants;
 import com.moko.mk107dpro.R;
 import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.ActivityDeviceConfig107dproBinding;
 import com.moko.mk107dpro.db.DBTools107dPro;
-import com.moko.lib.scannerui.dialog.CustomDialog;
 import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.entity.MokoDevice;
 import com.moko.mk107dpro.utils.SPUtiles;
-import com.moko.lib.scannerui.utils.ToastUtils;
 import com.moko.support.mk107dpro35d.MQTTConstants;
-import com.moko.lib.mqtt.MQTTSupport;
 import com.moko.support.mk107dpro35d.MokoSupport;
 import com.moko.support.mk107dpro35d.OrderTaskAssembler;
-import com.moko.lib.mqtt.entity.MsgNotify;
 import com.moko.support.mk107dpro35d.entity.OrderCHAR;
 import com.moko.support.mk107dpro35d.entity.ParamsKeyEnum;
-import com.moko.lib.mqtt.event.MQTTMessageArrivedEvent;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.greenrobot.eventbus.EventBus;
@@ -44,6 +41,9 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Type;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 
 public class DeviceConfig107dProActivity extends BaseActivity<ActivityDeviceConfig107dproBinding> {
     private MQTTConfig mAppMqttConfig;

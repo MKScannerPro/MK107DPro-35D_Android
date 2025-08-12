@@ -6,37 +6,35 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.moko.lib.mqtt.MQTTSupport;
+import com.moko.lib.mqtt.entity.MsgConfigResult;
+import com.moko.lib.mqtt.entity.MsgNotify;
+import com.moko.lib.mqtt.event.DeviceModifyNameEvent;
+import com.moko.lib.mqtt.event.DeviceOnlineEvent;
+import com.moko.lib.mqtt.event.MQTTMessageArrivedEvent;
+import com.moko.lib.scannerui.dialog.AlertMessageDialog;
+import com.moko.lib.scannerui.dialog.CharWriteDialog;
+import com.moko.lib.scannerui.utils.ToastUtils;
 import com.moko.mk107dpro.AppConstants;
 import com.moko.mk107dpro.R;
 import com.moko.mk107dpro.adapter.BleCharacteristics107dProAdapter;
 import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.ActivityOtherInfo107dproBinding;
 import com.moko.mk107dpro.db.DBTools107dPro;
-import com.moko.lib.scannerui.dialog.AlertMessageDialog;
-import com.moko.lib.scannerui.dialog.CharWriteDialog;
 import com.moko.mk107dpro.entity.BleOtherChar;
 import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.entity.MokoDevice;
 import com.moko.mk107dpro.utils.SPUtiles;
-import com.moko.lib.scannerui.utils.ToastUtils;
 import com.moko.support.mk107dpro35d.MQTTConstants;
-import com.moko.lib.mqtt.MQTTSupport;
 import com.moko.support.mk107dpro35d.entity.BleCharResponse;
 import com.moko.support.mk107dpro35d.entity.BleCharacteristic;
 import com.moko.support.mk107dpro35d.entity.BleService;
-import com.moko.lib.mqtt.entity.MsgConfigResult;
-import com.moko.lib.mqtt.entity.MsgNotify;
 import com.moko.support.mk107dpro35d.entity.OtherDeviceInfo;
-import com.moko.lib.mqtt.event.DeviceModifyNameEvent;
-import com.moko.lib.mqtt.event.DeviceOnlineEvent;
-import com.moko.lib.mqtt.event.MQTTMessageArrivedEvent;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.greenrobot.eventbus.Subscribe;
@@ -44,6 +42,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class BleOtherInfo107dProActivity extends BaseActivity<ActivityOtherInfo107dproBinding> implements BaseQuickAdapter.OnItemChildClickListener {
 

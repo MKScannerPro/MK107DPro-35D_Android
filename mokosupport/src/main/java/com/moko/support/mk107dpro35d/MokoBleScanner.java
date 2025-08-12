@@ -5,8 +5,6 @@ import android.content.Context;
 import android.os.ParcelUuid;
 import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
-
 import com.elvishew.xlog.XLog;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.support.mk107dpro35d.callback.MokoScanDeviceCallback;
@@ -16,6 +14,7 @@ import com.moko.support.mk107dpro35d.entity.OrderServices;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat;
 import no.nordicsemi.android.support.v18.scanner.ScanCallback;
 import no.nordicsemi.android.support.v18.scanner.ScanFilter;

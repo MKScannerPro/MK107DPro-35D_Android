@@ -6,35 +6,33 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.elvishew.xlog.XLog;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.moko.lib.mqtt.MQTTSupport;
+import com.moko.lib.mqtt.entity.MsgNotify;
+import com.moko.lib.mqtt.event.DeviceModifyNameEvent;
+import com.moko.lib.mqtt.event.DeviceOnlineEvent;
+import com.moko.lib.mqtt.event.MQTTMessageArrivedEvent;
+import com.moko.lib.scannerui.dialog.PasswordBleDialog;
+import com.moko.lib.scannerui.dialog.ScanFilterDialog;
+import com.moko.lib.scannerui.utils.ToastUtils;
 import com.moko.mk107dpro.AppConstants;
 import com.moko.mk107dpro.adapter.BleDevice107dProAdapter;
 import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.ActivityBleDevice107dproBinding;
 import com.moko.mk107dpro.db.DBTools107dPro;
-import com.moko.lib.scannerui.dialog.PasswordBleDialog;
-import com.moko.lib.scannerui.dialog.ScanFilterDialog;
 import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.entity.MokoDevice;
 import com.moko.mk107dpro.utils.SPUtiles;
-import com.moko.lib.scannerui.utils.ToastUtils;
 import com.moko.support.mk107dpro35d.MQTTConstants;
-import com.moko.lib.mqtt.MQTTSupport;
 import com.moko.support.mk107dpro35d.MokoSupport;
 import com.moko.support.mk107dpro35d.entity.BXPButtonInfo;
 import com.moko.support.mk107dpro35d.entity.BleDevice;
-import com.moko.lib.mqtt.entity.MsgNotify;
 import com.moko.support.mk107dpro35d.entity.OtherDeviceInfo;
-import com.moko.lib.mqtt.event.DeviceModifyNameEvent;
-import com.moko.lib.mqtt.event.DeviceOnlineEvent;
-import com.moko.lib.mqtt.event.MQTTMessageArrivedEvent;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.greenrobot.eventbus.EventBus;
@@ -47,6 +45,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class BleManager107dProActivity extends BaseActivity<ActivityBleDevice107dproBinding> implements BaseQuickAdapter.OnItemChildClickListener {
     private MokoDevice mMokoDevice;

@@ -10,21 +10,25 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.RadioGroup;
 
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
-
 import com.elvishew.xlog.XLog;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.moko.lib.mqtt.MQTTSupport;
+import com.moko.lib.mqtt.entity.MsgConfigResult;
+import com.moko.lib.mqtt.entity.MsgNotify;
+import com.moko.lib.mqtt.entity.MsgReadResult;
+import com.moko.lib.mqtt.event.DeviceOnlineEvent;
+import com.moko.lib.mqtt.event.MQTTMessageArrivedEvent;
+import com.moko.lib.scannerui.dialog.AlertMessageDialog;
+import com.moko.lib.scannerui.utils.ToastUtils;
 import com.moko.mk107dpro.AppConstants;
 import com.moko.mk107dpro.R;
 import com.moko.mk107dpro.activity.Main107dProActivity;
 import com.moko.mk107dpro.adapter.MQTTFragmentAdapter;
 import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.ActivityMqttDeviceModify107dproBinding;
-import com.moko.lib.scannerui.dialog.AlertMessageDialog;
 import com.moko.mk107dpro.entity.MQTTConfig;
 import com.moko.mk107dpro.entity.MokoDevice;
 import com.moko.mk107dpro.fragment.GeneralDevice107dProFragment;
@@ -33,15 +37,8 @@ import com.moko.mk107dpro.fragment.SSLDeviceUrl107dProFragment;
 import com.moko.mk107dpro.fragment.UserDevice107dProFragment;
 import com.moko.mk107dpro.utils.FileUtils;
 import com.moko.mk107dpro.utils.SPUtiles;
-import com.moko.lib.scannerui.utils.ToastUtils;
 import com.moko.mk107dpro.utils.Utils;
 import com.moko.support.mk107dpro35d.MQTTConstants;
-import com.moko.lib.mqtt.MQTTSupport;
-import com.moko.lib.mqtt.entity.MsgConfigResult;
-import com.moko.lib.mqtt.entity.MsgNotify;
-import com.moko.lib.mqtt.entity.MsgReadResult;
-import com.moko.lib.mqtt.event.DeviceOnlineEvent;
-import com.moko.lib.mqtt.event.MQTTMessageArrivedEvent;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -58,6 +55,9 @@ import java.io.File;
 import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+
+import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 public class ModifyMQTTSettings107dProActivity extends BaseActivity<ActivityMqttDeviceModify107dproBinding> implements RadioGroup.OnCheckedChangeListener {
     public static String TAG = ModifyMQTTSettings107dProActivity.class.getSimpleName();

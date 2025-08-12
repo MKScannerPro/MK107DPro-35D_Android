@@ -3,17 +3,15 @@ package com.moko.mk107dpro.activity;
 import android.text.TextUtils;
 import android.view.View;
 
-import androidx.annotation.NonNull;
-
 import com.moko.ble.lib.MokoConstants;
 import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
+import com.moko.lib.scannerui.utils.ToastUtils;
 import com.moko.mk107dpro.base.BaseActivity;
 import com.moko.mk107dpro.databinding.ActivityNetworkSettings107dproBinding;
-import com.moko.lib.scannerui.utils.ToastUtils;
 import com.moko.support.mk107dpro35d.MokoSupport;
 import com.moko.support.mk107dpro35d.OrderTaskAssembler;
 import com.moko.support.mk107dpro35d.entity.OrderCHAR;
@@ -25,6 +23,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
 
 public class NetworkSettings107dProActivity extends BaseActivity<ActivityNetworkSettings107dproBinding> {
     private boolean mSavedParamsError;
